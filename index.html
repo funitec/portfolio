@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Robotics × AI Engineer</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --bg-card: #ffffff;
+    --border: #e4e4e0;
+    --text: #1f2328;
+    --text-sub: #57606a;
+    --accent: #0969da;
+    --accent-soft: #ddeeff;
+    --gold: #9a6700;
+    --gold-soft: #fff3d1;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.9;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== Hero ===== */
+  header {
+    padding: 88px 0 64px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    padding: 5px 16px;
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.45;
+    margin-bottom: 20px;
+    letter-spacing: .01em;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-sub);
+    max-width: 660px;
+  }
+  .hero-highlights {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hero-badge {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .hero-badge .mark {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-size: 1.1rem;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+  }
+  .hero-badge.gold .mark { background: var(--gold-soft); }
+  .hero-badge.gold { color: var(--gold); }
+  .hero-links { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-links a {
+    text-decoration: none;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: .92rem;
+    font-weight: 600;
+    transition: border-color .2s, background .2s;
+  }
+  .hero-links a:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .hero-links a.primary:hover { background: #0a5bbd; }
+
+  /* ===== Sections ===== */
+  section { padding: 72px 0; }
+  .section-label {
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  h2 { font-size: 1.7rem; font-weight: 800; margin-bottom: 12px; }
+  .section-desc { color: var(--text-sub); margin-bottom: 44px; max-width: 620px; }
+
+  /* ===== Achievement cards ===== */
+  .achv { display: flex; flex-direction: column; gap: 28px; }
+  .achv-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .achv-card.award { border-left: 4px solid #d4a72c; }
+  .achv-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .achv-head h3 { font-size: 1.3rem; font-weight: 700; }
+  .result-badge {
+    font-size: .82rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .result-badge.gold { background: var(--gold-soft); color: var(--gold); }
+  .achv-role {
+    font-size: .9rem;
+    color: var(--text-sub);
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .achv-card > p { color: var(--text); margin-bottom: 12px; }
+  .achv-card ul { list-style: none; }
+  .achv-card ul li {
+    color: var(--text-sub);
+    padding-left: 1.4em;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .achv-card ul li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .tech-note {
+    margin-top: 18px;
+    font-size: .88rem;
+    color: var(--text-sub);
+  }
+  .tech-note strong { color: var(--text); font-weight: 600; }
+
+  /* ===== Research ===== */
+  .r-list { display: flex; flex-direction: column; gap: 28px; }
+  .r-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .r-item .cat {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-sub);
+  }
+  .r-item h3 { font-size: 1.2rem; font-weight: 700; margin: 6px 0 12px; }
+  .r-item p { color: var(--text-sub); }
+
+  /* ===== Works ===== */
+  .work-list { display: flex; flex-direction: column; gap: 20px; }
+  .work-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 36px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .work-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+  .work-head h3 { font-size: 1.15rem; font-weight: 700; }
+  .work-head .cat { font-size: .85rem; color: var(--text-sub); }
+  .work-item p { color: var(--text-sub); font-size: .97rem; }
+
+  /* ===== Skills ===== */
+  .skill-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .skill-table th, .skill-table td { padding: 18px 24px; text-align: left; vertical-align: top; }
+  .skill-table tr + tr { border-top: 1px solid var(--border); }
+  .skill-table th {
+    width: 200px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    background: #fcfcfa;
+  }
+  .skill-table td { color: var(--text-sub); font-size: .95rem; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    background: #fff;
+    padding: 48px 0;
+    text-align: center;
+    color: var(--text-sub);
+    font-size: .9rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .achv-card, .r-item, .work-item { padding: 24px 22px; }
+    .skill-table th { width: auto; display: block; padding-bottom: 4px; }
+    .skill-table td { display: block; padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <span class="hero-tag">Robotics × AI — Motion Generation / Sim-to-Real</span>
+    <h1>ロボットの「動き」をつくる。<br>シミュレーションから実機まで。</h1>
+    <p class="hero-sub">
+      Transformer・拡散モデルによるロボットモーション生成を研究しています。
+      Unitree Go2 での sim-to-real 実装、ロボコンでの全国大会出場・受賞経験を持ち、
+      強化学習の方策設計から実機モーター制御、開発を支えるツール製作まで一気通貫で取り組んでいます。
+    </p>
+    <div class="hero-highlights">
+      <span class="hero-badge gold"><span class="mark">🏆</span>レスキューロボットコンテスト2024 消防庁長官賞 受賞</span>
+      <span class="hero-badge"><span class="mark">🤖</span>NHKロボコン2024 全国大会出場（自チーム史上初）</span>
+      <span class="hero-badge"><span class="mark">⚙️</span>Unitree Go2 の強化学習 → 実機制御（sim-to-real）を完遂</span>
+    </div>
+    <div class="hero-links">
+      <a class="primary" href="#achievements">大会実績を見る</a>
+      <a href="#research">研究</a>
+      <a href="#works">制作物</a>
+      <a href="mailto:koufuku293@gmail.com">Contact</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 大会実績 ===== -->
+<section id="achievements">
+  <div class="container">
+    <div class="section-label">Achievements</div>
+    <h2>大会実績</h2>
+    <p class="section-desc">ロボコンを中心とした大会での実績。ソフトウェア上位層の設計からチームリーダーまで。</p>
+
+    <div class="achv">
+
+      <!-- レスコン -->
+      <div class="achv-card award">
+        <div class="achv-head">
+          <h3>レスキューロボットコンテスト 2024</h3>
+          <span class="result-badge gold">🏆 消防庁長官賞 受賞</span>
+        </div>
+        <div class="achv-role">役割：チームリーダー ／ ロボット制御・通信システム開発</div>
+        <p>
+          3機体のロボット制御と独自通信システムを自作。後輩が迅速に開発へ参加できるよう、
+          企画段階からチーム体制を整備しながら開発を主導しました。
+        </p>
+        <ul>
+          <li>探索専用ロボットの投入により救助プロセスを迅速化</li>
+          <li>被救助者への負担を最小化する新機構が評価され受賞</li>
+          <li>3機体を統合制御する通信システムをゼロから設計・実装</li>
+        </ul>
+      </div>
+
+      <!-- NHKロボコン -->
+      <div class="achv-card">
+        <div class="achv-head">
+          <h3>NHKロボコン 2024</h3>
+          <span class="result-badge">全国大会出場（自チーム史上初）</span>
+        </div>
+        <div class="achv-role">役割：ソフトウェア上位層担当（Unity）</div>
+        <p>
+          完全自動走行ロボットの開発において、ソフトウェアの上位層一式を Unity で開発。
+          「誰でも扱える」ことを重視したツール設計でチームの開発と運用を支えました。
+        </p>
+        <ul>
+          <li>自動走行ロボットの状態をリアルタイムで把握できる監視GUI</li>
+          <li>移動先・行動手順を誰でも編集できるゲーム感覚の行動計画エディタ</li>
+          <li>目標速度をロボットへ送信する通信アプリケーション</li>
+        </ul>
+      </div>
+
+      <!-- キャチロボ -->
+      <div class="achv-card">
+        <div class="achv-head">
+          <h3>キャチロボコンテスト</h3>
+          <span class="result-badge">シミュレーター自作で開発効率を大幅改善</span>
+        </div>
+        <div class="achv-role">役割：シミュレーター開発</div>
+        <p>
+          ハードウェア完成前から動作検証できるよう、シミュレーターをゼロから自作。
+          ハードウェア開発とソフトウェア開発の並行進行を実現し、開発効率を大幅に改善しました。
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== 研究 ===== -->
+<section id="research">
+  <div class="container">
+    <div class="section-label">Research</div>
+    <h2>研究</h2>
+    <p class="section-desc">ロボットモーション生成と sim-to-real。シミュレーションの方策を実機で動かすところまで。</p>
+
+    <div class="r-list">
+
+      <div class="r-item">
+        <span class="cat">現在の研究</span>
+        <h3>拡散モデルによるロボットモーション生成</h3>
+        <p>
+          Transformer を用いたロボットのモーション生成を研究。拡散モデルをコアに据えた
+          モーション生成フレームワークを構築し、ロボットが意図を非言語的に伝える
+          動作表現の実現を目指しています。学会発表を準備中。
+        </p>
+      </div>
+
+      <div class="r-item">
+        <span class="cat">Sim-to-Real</span>
+        <h3>Unitree Go2 の強化学習と実機展開</h3>
+        <p>
+          Isaac Sim・Genesis を用いた強化学習環境で Unitree Go2 の方策を学習し、
+          sim-to-real による各関節モーター制御の実機接続・実装まで完遂。
+          ドメインランダマイゼーションの設計とリワード関数のチューニングが
+          sim-to-real の成否を左右することを実践から習得しました。
+          オリジナル設計の倒立振子ロボットでの強化学習も実施。
+        </p>
+      </div>
+
+      <div class="r-item">
+        <span class="cat">学部研究</span>
+        <h3>脳卒中患者向け上肢訓練機器のシステム改修</h3>
+        <p>
+          学部時代はリハビリテーション機器の研究に従事。訓練効果の向上と
+          機器の機械的評価を可能にするソフトウェアシステムを開発しました。
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== 制作物 ===== -->
+<section id="works">
+  <div class="container">
+    <div class="section-label">Works</div>
+    <h2>制作物</h2>
+    <p class="section-desc">個人開発・論文再現実装など。AIとインタラクション、モーション技術の実験場。</p>
+
+    <div class="work-list">
+
+      <div class="work-item">
+        <div class="work-head">
+          <h3>Emotion Avatar</h3>
+          <span class="cat">キャラクターAI ／ Unity + Python</span>
+        </div>
+        <p>
+          「関係性を築けるキャラクター」を目指した感情アバターアプリ。Russell感情円環と
+          Ekman 6基本感情、信頼・親密度を統合した感情モデルを設計し、Unity と
+          Python (FastAPI + PyTorch) を WebSocket でリアルタイム接続。
+          GRU による時系列記憶と VAE による動作の個体差表現まで設計しています。
+        </p>
+      </div>
+
+      <div class="work-item">
+        <div class="work-head">
+          <h3>ROBOcustom</h3>
+          <span class="cat">ゲーム開発 ／ Unity + C#</span>
+        </div>
+        <p>
+          ロボットカスタマイズ × ビジュアルプログラミングのバトルゲーム。
+          自作ノードエディタでロボットの行動ロジックを組み、AI同士のバトルで撃破数を競います。
+          ゲームAI・物理判定・アイテムシステムを実装。
+        </p>
+      </div>
+
+      <div class="work-item">
+        <div class="work-head">
+          <h3>HuMoT 再現実装</h3>
+          <span class="cat">論文再現 ／ PyTorch</span>
+        </div>
+        <p>
+          トポロジー非依存のモーションリターゲティング Transformer (arXiv:2305.18897) を、
+          公式コード非公開の中 PyTorch でフルスクラッチ再現。XCiT ブロックから学習ループ、
+          テスト一式まで約216万パラメータのモデルを実装しました。
+        </p>
+      </div>
+
+      <div class="work-item">
+        <div class="work-head">
+          <h3>MoST (CVPR 2024) の Windows 移植</h3>
+          <span class="cat">学習環境構築 ／ PyTorch + CUDA</span>
+        </div>
+        <p>
+          モーションスタイル変換モデル MoST を Linux 前提の公式環境から
+          Windows + RTX 4060 Ti へ移植。CUDA 非互換の解決、コードパッチ、
+          データ前処理から GPU 学習の検証まで完了しました。
+        </p>
+      </div>
+
+      <div class="work-item">
+        <div class="work-head">
+          <h3>TripoSplat ローカル運用</h3>
+          <span class="cat">3D生成 ／ 3D Gaussian Splatting</span>
+        </div>
+        <p>
+          1枚の画像から 3D Gaussian Splat（最大26万個）を生成するモデルを
+          ローカルGPUにセットアップし、画像→3D生成パイプラインを構築・運用しています。
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== スキル ===== -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">Skills</div>
+    <h2>スキル</h2>
+    <p class="section-desc">研究・大会・個人開発で実際に使ってきた技術です。</p>
+
+    <table class="skill-table">
+      <tr>
+        <th>Python / PyTorch</th>
+        <td>研究室で日常的に使用。Transformer・GAN・拡散モデルによるモーション生成モデルの実装と学習パイプライン構築。</td>
+      </tr>
+      <tr>
+        <th>ROS2</th>
+        <td>ロボコン・授業を通じて使用。トピック・アクション通信を用いたロボット開発の実務経験。</td>
+      </tr>
+      <tr>
+        <th>Isaac Sim / Genesis</th>
+        <td>Unitree Go2・オリジナル倒立振子ロボットの強化学習環境として使用。Genesis では sim-to-real で実機モーター制御まで完遂。</td>
+      </tr>
+      <tr>
+        <th>Unity / C#</th>
+        <td>NHKロボコンの自動走行GUI・行動計画エディタ・通信アプリ、キャチロボの自作シミュレーター、個人ゲーム開発。</td>
+      </tr>
+      <tr>
+        <th>Arduino / C++</th>
+        <td>マイコンプログラムの作成・組み込み開発。</td>
+      </tr>
+      <tr>
+        <th>環境構築 / CUDA</th>
+        <td>研究モデルの Windows GPU 環境への移植、依存関係の解決、生成モデルのローカル運用。</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Contact: <a href="mailto:koufuku293@gmail.com">koufuku293@gmail.com</a> ／ <a href="https://x.com/wHgWIQWQhkSpXA4" target="_blank" rel="noopener">X (Twitter)</a></p>
+    <p style="margin-top:8px;">© 2026 Portfolio</p>
+  </div>
+</footer>
+
+</body>
+</html>
