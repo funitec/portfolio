@@ -4,256 +4,608 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Robotics × AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #fafaf8;
+    --bg: #f6f8fc;
     --bg-card: #ffffff;
-    --border: #e4e4e0;
-    --text: #1f2328;
-    --text-sub: #57606a;
-    --accent: #0969da;
-    --accent-soft: #ddeeff;
-    --gold: #9a6700;
-    --gold-soft: #fff3d1;
-    --radius: 12px;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-sub: #64748b;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
+    --accent-soft: #eef2ff;
+    --gold: #d97706;
+    --gold-soft: #fffbeb;
+    --radius: 16px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.04);
+    --shadow-lg: 0 20px 48px rgba(0,0,0,.13);
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
-    font-size: 16.5px;
-    line-height: 1.9;
+    font-family: "Inter", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+    font-size: 16px;
+    line-height: 1.85;
+    overflow-x: hidden;
   }
-  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 28px; }
+
+  /* ===== Navigation ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.80);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(226,232,240,0.7);
+    height: 58px;
+    display: flex; align-items: center;
+    padding: 0 28px;
+    justify-content: space-between;
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: var(--shadow-md); }
+  .nav-logo {
+    font-size: .95rem; font-weight: 900;
+    background: linear-gradient(130deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -.02em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 4px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-sub);
+    font-size: .87rem; font-weight: 600;
+    padding: 6px 13px; border-radius: 8px;
+    transition: color .2s, background .2s;
+  }
+  .nav-links a:hover { color: var(--accent); background: var(--accent-soft); }
+  .nav-toggle {
+    display: none; background: none; border: none;
+    font-size: 1.35rem; cursor: pointer; color: var(--text);
+    padding: 4px 8px;
+  }
 
   /* ===== Hero ===== */
-  header {
-    padding: 88px 0 64px;
-    background: #fff;
-    border-bottom: 1px solid var(--border);
+  .hero {
+    min-height: 100svh;
+    background: linear-gradient(145deg, #0d0b22 0%, #1e1b4b 40%, #2d1b69 70%, #1a1040 100%);
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 100px 0 72px;
   }
-  .hero-tag {
-    display: inline-block;
-    font-size: .88rem;
-    font-weight: 600;
-    color: var(--accent);
-    background: var(--accent-soft);
-    border-radius: 999px;
-    padding: 5px 16px;
-    margin-bottom: 24px;
+  /* Animated glow blobs */
+  .blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); pointer-events: none;
   }
-  h1 {
-    font-size: clamp(1.8rem, 4.5vw, 2.6rem);
-    font-weight: 800;
-    line-height: 1.45;
-    margin-bottom: 20px;
-    letter-spacing: .01em;
+  .blob-1 {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle at center, rgba(99,102,241,.28), transparent 70%);
+    top: -120px; left: -120px;
+    animation: blobMove 10s ease-in-out infinite;
   }
-  .hero-sub {
-    font-size: 1.05rem;
-    color: var(--text-sub);
-    max-width: 660px;
+  .blob-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle at center, rgba(139,92,246,.22), transparent 70%);
+    bottom: -80px; right: -80px;
+    animation: blobMove 10s ease-in-out infinite reverse;
+    animation-delay: -5s;
   }
-  .hero-highlights {
-    margin-top: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .blob-3 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle at center, rgba(6,182,212,.18), transparent 70%);
+    top: 40%; left: 55%;
+    animation: blobMove 14s ease-in-out infinite;
+    animation-delay: -7s;
   }
-  .hero-badge {
-    display: flex; align-items: center; gap: 12px;
-    font-size: 1rem;
-    font-weight: 600;
+  @keyframes blobMove {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%       { transform: translate(28px,-18px) scale(1.06); }
+    66%       { transform: translate(-18px,14px) scale(.95); }
   }
-  .hero-badge .mark {
-    width: 34px; height: 34px;
-    border-radius: 8px;
-    display: grid; place-items: center;
-    font-size: 1.1rem;
-    background: var(--accent-soft);
-    flex-shrink: 0;
-  }
-  .hero-badge.gold .mark { background: var(--gold-soft); }
-  .hero-badge.gold { color: var(--gold); }
-  .hero-links { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
-  .hero-links a {
-    text-decoration: none;
-    color: var(--text);
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 20px;
-    font-size: .92rem;
-    font-weight: 600;
-    transition: border-color .2s, background .2s;
-  }
-  .hero-links a:hover { border-color: var(--accent); color: var(--accent); }
-  .hero-links a.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .hero-links a.primary:hover { background: #0a5bbd; }
 
-  /* ===== Sections ===== */
-  section { padding: 72px 0; }
-  .section-label {
-    font-size: .82rem;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
+  /* Grid pattern overlay */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
   }
-  h2 { font-size: 1.7rem; font-weight: 800; margin-bottom: 12px; }
-  .section-desc { color: var(--text-sub); margin-bottom: 44px; max-width: 620px; }
+
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .78rem; font-weight: 700;
+    color: #a5b4fc; letter-spacing: .1em; text-transform: uppercase;
+    background: rgba(99,102,241,.12);
+    border: 1px solid rgba(99,102,241,.28);
+    border-radius: 999px; padding: 5px 16px;
+    margin-bottom: 28px;
+  }
+  .hero-tag .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #818cf8;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.1rem, 6.5vw, 3.6rem);
+    font-weight: 900; color: #fff;
+    line-height: 1.28; letter-spacing: -.025em;
+    margin-bottom: 26px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #818cf8 0%, #c4b5fd 50%, #67e8f9 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem; color: #94a3b8;
+    max-width: 580px; margin-bottom: 36px; line-height: 2;
+  }
+
+  .hero-badges { display: flex; flex-direction: column; gap: 12px; margin-bottom: 44px; }
+  .hbadge {
+    display: inline-flex; align-items: center; gap: 13px;
+    font-size: .97rem; font-weight: 600; color: #e2e8f0;
+  }
+  .hbadge .ico {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    display: grid; place-items: center; font-size: 1.1rem;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+  }
+  .hbadge.award .ico { background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.35); }
+  .hbadge.award { color: #fcd34d; }
+
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    font-size: .92rem; font-weight: 700;
+    padding: 11px 24px; border-radius: 10px;
+    transition: transform .2s, box-shadow .2s, background .2s;
+    cursor: pointer; border: none; line-height: 1;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(99,102,241,.42);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(99,102,241,.55); }
+  .btn-ghost {
+    background: rgba(255,255,255,.08);
+    color: #e2e8f0; border: 1px solid rgba(255,255,255,.18);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,.14); transform: translateY(-1px); }
+
+  /* Floating tags (desktop only) */
+  .hero-float {
+    position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+  }
+  .float-tag {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px; padding: 7px 18px;
+    font-size: .78rem; font-weight: 600; color: #cbd5e1;
+    white-space: nowrap;
+    animation: floatY 5s ease-in-out infinite;
+  }
+  .float-tag:nth-child(2) { animation-delay: -1.6s; margin-left: 14px; }
+  .float-tag:nth-child(3) { animation-delay: -3.2s; }
+  .float-tag:nth-child(4) { animation-delay: -4.8s; margin-left: 10px; }
+  .float-tag:nth-child(5) { animation-delay: -2.4s; }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-9px); }
+  }
+
+  /* ===== Section base ===== */
+  section { padding: 88px 0; }
+  .section-head { margin-bottom: 48px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: .75rem; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+  .section-label::before {
+    content: ""; display: block; width: 22px; height: 2px; border-radius: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  }
+  h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 900; letter-spacing: -.025em; margin-bottom: 12px;
+  }
+  .section-desc { color: var(--text-sub); max-width: 580px; font-size: .97rem; }
+
+  .section-white { background: #fff; }
+
+  /* ===== About ===== */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 52px; align-items: start;
+  }
+  .about-text p { color: var(--text-sub); margin-bottom: 16px; font-size: .97rem; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .stat-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 20px; text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .stat-num {
+    font-size: 1.9rem; font-weight: 900; line-height: 1; margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-lbl { font-size: .78rem; color: var(--text-sub); font-weight: 700; letter-spacing: .02em; }
 
   /* ===== Achievement cards ===== */
-  .achv { display: flex; flex-direction: column; gap: 28px; }
+  .achv { display: flex; flex-direction: column; gap: 24px; }
   .achv-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 36px 40px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px 40px;
+    box-shadow: var(--shadow-sm);
+    position: relative; overflow: hidden;
+    transition: transform .25s, box-shadow .25s;
   }
-  .achv-card.award { border-left: 4px solid #d4a72c; }
-  .achv-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
-  .achv-head h3 { font-size: 1.3rem; font-weight: 700; }
-  .result-badge {
-    font-size: .82rem;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent);
+  .achv-card::after {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transform: scaleX(0); transform-origin: left; transition: transform .35s;
   }
-  .result-badge.gold { background: var(--gold-soft); color: var(--gold); }
+  .achv-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .achv-card:hover::after { transform: scaleX(1); }
+  .achv-card.award {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(160deg, #fff 80%, #fffef5 100%);
+  }
+  .achv-card.award::after { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+  .achv-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .achv-head h3 { font-size: 1.2rem; font-weight: 800; }
+  .badge {
+    font-size: .78rem; font-weight: 700;
+    padding: 4px 14px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .badge.gold {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    box-shadow: 0 2px 8px rgba(245,158,11,.22);
+  }
   .achv-role {
-    font-size: .9rem;
-    color: var(--text-sub);
-    margin-bottom: 16px;
-    padding-bottom: 14px;
+    font-size: .86rem; color: var(--text-sub); font-weight: 500;
+    margin-bottom: 14px; padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
   }
-  .achv-card > p { color: var(--text); margin-bottom: 12px; }
-  .achv-card ul { list-style: none; }
+  .achv-card > p { color: var(--text); font-size: .96rem; margin-bottom: 14px; }
+  .achv-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .achv-card ul li {
-    color: var(--text-sub);
-    padding-left: 1.4em;
-    position: relative;
-    margin-bottom: 6px;
+    color: var(--text-sub); font-size: .92rem;
+    padding-left: 1.6em; position: relative;
   }
-  .achv-card ul li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
-  .tech-note {
-    margin-top: 18px;
-    font-size: .88rem;
-    color: var(--text-sub);
+  .achv-card ul li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  /* Video embed */
+  .video-wrap {
+    position: relative; padding-bottom: 56.25%;
+    border-radius: 12px; overflow: hidden;
+    background: #0f172a; margin-top: 24px;
+    box-shadow: var(--shadow-md);
   }
-  .tech-note strong { color: var(--text); font-weight: 600; }
+  .video-wrap iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; border: none;
+  }
+  .video-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    color: #a5b4fc; font-size: .88rem; text-align: center; padding: 24px;
+  }
+  .play-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(99,102,241,.28); border: 2px solid rgba(99,102,241,.5);
+    display: grid; place-items: center; font-size: 1.4rem;
+  }
 
   /* ===== Research ===== */
-  .r-list { display: flex; flex-direction: column; gap: 28px; }
+  .r-list { display: flex; flex-direction: column; gap: 20px; }
   .r-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px 40px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 30px 36px;
+    box-shadow: var(--shadow-sm);
+    display: grid; grid-template-columns: 56px 1fr; gap: 0 24px; align-items: start;
+    transition: transform .2s, box-shadow .2s;
   }
-  .r-item .cat {
-    font-size: .8rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--text-sub);
+  .r-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .r-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: grid; place-items: center; font-size: 1.45rem;
+    margin-top: 2px;
   }
-  .r-item h3 { font-size: 1.2rem; font-weight: 700; margin: 6px 0 12px; }
-  .r-item p { color: var(--text-sub); }
+  .r-icon.violet { background: linear-gradient(135deg, #eef2ff, #ede9fe); }
+  .r-icon.blue   { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+  .r-icon.green  { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+  .r-body .cat {
+    font-size: .76rem; font-weight: 700; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--text-sub); margin-bottom: 5px;
+  }
+  .r-body h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; }
+  .r-body p  { color: var(--text-sub); font-size: .94rem; }
 
   /* ===== Works ===== */
-  .work-list { display: flex; flex-direction: column; gap: 20px; }
-  .work-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 36px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  .work-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 30px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    position: relative;
   }
-  .work-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
-  .work-head h3 { font-size: 1.15rem; font-weight: 700; }
-  .work-head .cat { font-size: .85rem; color: var(--text-sub); }
-  .work-item p { color: var(--text-sub); font-size: .97rem; }
+  .work-card:hover {
+    transform: translateY(-5px); box-shadow: var(--shadow-lg);
+    border-color: rgba(99,102,241,.3);
+  }
+  .work-card-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    display: grid; place-items: center; font-size: 1.3rem;
+    background: linear-gradient(135deg, var(--accent-soft), #ede9fe);
+    margin-bottom: 14px;
+  }
+  .work-card h3 { font-size: 1.07rem; font-weight: 800; margin-bottom: 4px; }
+  .work-cat { font-size: .8rem; color: var(--text-sub); font-weight: 600; margin-bottom: 10px; }
+  .work-card p { color: var(--text-sub); font-size: .89rem; line-height: 1.78; margin-bottom: 14px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    font-size: .73rem; font-weight: 600; padding: 3px 9px;
+    border-radius: 6px; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text-sub);
+  }
+
+  /* Featured card (full width) */
+  .work-card.wide { grid-column: 1 / -1; }
+  .wide-inner {
+    display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start;
+  }
 
   /* ===== Skills ===== */
-  .skill-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
-  .skill-table th, .skill-table td { padding: 18px 24px; text-align: left; vertical-align: top; }
-  .skill-table tr + tr { border-top: 1px solid var(--border); }
-  .skill-table th {
-    width: 200px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text);
-    white-space: nowrap;
-    background: #fcfcfa;
+  .skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .skill-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px 30px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s, box-shadow .2s;
   }
-  .skill-table td { color: var(--text-sub); font-size: .95rem; }
+  .skill-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .skill-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .skill-card-ico {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: grid; place-items: center; font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--accent-soft), #ede9fe); flex-shrink: 0;
+  }
+  .skill-card-head h3 { font-size: .97rem; font-weight: 700; }
+  .skill-card p { font-size: .87rem; color: var(--text-sub); margin-bottom: 14px; line-height: 1.75; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag {
+    font-size: .75rem; font-weight: 600; padding: 4px 11px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--accent-soft), #ede9fe);
+    color: var(--accent); border: 1px solid rgba(99,102,241,.18);
+  }
 
-  footer {
-    border-top: 1px solid var(--border);
-    background: #fff;
-    padding: 48px 0;
-    text-align: center;
-    color: var(--text-sub);
-    font-size: .9rem;
+  /* ===== Contact ===== */
+  #contact {
+    background: linear-gradient(145deg, #0d0b22 0%, #1e1b4b 50%, #1a1040 100%);
   }
-  footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  #contact .section-label { color: #a5b4fc; }
+  #contact .section-label::before { background: linear-gradient(90deg, #818cf8, #c4b5fd); }
+  #contact h2 { color: #fff; }
+  #contact .section-desc { color: #94a3b8; }
+  .contact-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .contact-card {
+    text-decoration: none; color: #e2e8f0;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: var(--radius); padding: 28px 20px; text-align: center;
+    transition: background .2s, transform .2s, border-color .2s;
+  }
+  .contact-card:hover {
+    background: rgba(255,255,255,.12); transform: translateY(-3px);
+    border-color: rgba(99,102,241,.4);
+  }
+  .contact-card .cc-ico { font-size: 1.8rem; margin-bottom: 10px; }
+  .contact-card .cc-lbl {
+    font-size: .74rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: #64748b; margin-bottom: 4px;
+  }
+  .contact-card .cc-val { font-size: .9rem; font-weight: 600; word-break: break-all; }
+
+  /* ===== Footer ===== */
+  footer {
+    background: #07060f; padding: 32px 0;
+    text-align: center; color: #475569; font-size: .87rem;
+  }
+  footer a { color: #818cf8; text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
-  @media (max-width: 600px) {
-    .achv-card, .r-item, .work-item { padding: 24px 22px; }
-    .skill-table th { width: auto; display: block; padding-bottom: 4px; }
-    .skill-table td { display: block; padding-top: 0; }
+  /* ===== Scroll-in animation ===== */
+  .fade-up {
+    opacity: 0; transform: translateY(26px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .fade-up.in { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: .08s; }
+  .fade-up:nth-child(3) { transition-delay: .16s; }
+  .fade-up:nth-child(4) { transition-delay: .24s; }
+  .fade-up:nth-child(5) { transition-delay: .32s; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 820px) {
+    .hero-float { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+    .wide-inner  { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 58px; left: 0; right: 0;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .nav-toggle { display: block; }
+    .work-grid  { grid-template-columns: 1fr; }
+    .skill-grid { grid-template-columns: 1fr; }
+    .contact-row { grid-template-columns: 1fr; }
+    .r-item { grid-template-columns: 1fr; }
+    .r-icon { margin-bottom: 12px; }
+    .achv-card { padding: 24px 20px; }
+    section { padding: 64px 0; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 420px) {
+    .hero h1 { font-size: 1.95rem; }
+    .hero-btns { flex-direction: column; align-items: flex-start; }
+    .stats-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<header>
+<!-- ===== Nav ===== -->
+<nav id="main-nav">
+  <a href="#top" class="nav-logo">funitec</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#achievements">実績</a></li>
+    <li><a href="#research">研究</a></li>
+    <li><a href="#works">制作物</a></li>
+    <li><a href="#skills">スキル</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="メニュー">☰</button>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero" id="top">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-grid"></div>
+
   <div class="container">
-    <span class="hero-tag">Robotics × AI — Motion Generation / Sim-to-Real</span>
-    <h1>ロボットの「動き」をつくる。<br>シミュレーションから実機まで。</h1>
-    <p class="hero-sub">
-      Transformer・拡散モデルによるロボットモーション生成を研究しています。
-      Unitree Go2 での sim-to-real 実装、ロボコンでの全国大会出場・受賞経験を持ち、
-      強化学習の方策設計から実機モーター制御、開発を支えるツール製作まで一気通貫で取り組んでいます。
-    </p>
-    <div class="hero-highlights">
-      <span class="hero-badge gold"><span class="mark">🏆</span>レスキューロボットコンテスト2024 消防庁長官賞 受賞</span>
-      <span class="hero-badge"><span class="mark">🤖</span>NHKロボコン2024 全国大会出場（自チーム史上初）</span>
-      <span class="hero-badge"><span class="mark">⚙️</span>Unitree Go2 の強化学習 → 実機制御（sim-to-real）を完遂</span>
-    </div>
-    <div class="hero-links">
-      <a class="primary" href="#achievements">大会実績を見る</a>
-      <a href="#research">研究</a>
-      <a href="#works">制作物</a>
-      <a href="mailto:koufuku293@gmail.com">Contact</a>
+    <div class="hero-inner">
+      <div class="hero-tag"><span class="dot"></span>Robotics × AI &nbsp;—&nbsp; Motion Generation / Sim-to-Real</div>
+      <h1>ロボットの「動き」を<br><span class="grad">つくる。</span><br>シミュレーションから実機まで。</h1>
+      <p class="hero-sub">
+        Transformer・拡散モデルによるロボットモーション生成を研究。強化学習の方策設計から
+        実機モーター制御、開発を支えるツール製作まで一気通貫で取り組んでいます。
+      </p>
+      <div class="hero-badges">
+        <span class="hbadge award"><span class="ico">🏆</span>レスキューロボットコンテスト2024 消防庁長官賞 受賞</span>
+        <span class="hbadge"><span class="ico">🤖</span>NHKロボコン2024 全国大会出場（自チーム史上初）</span>
+        <span class="hbadge"><span class="ico">⚙️</span>Unitree Go2 強化学習 → 実機制御（sim-to-real）完遂</span>
+      </div>
+      <div class="hero-btns">
+        <a class="btn btn-primary" href="#achievements">大会実績を見る</a>
+        <a class="btn btn-ghost" href="#works">制作物</a>
+        <a class="btn btn-ghost" href="https://github.com/funitec" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
     </div>
   </div>
-</header>
+
+  <div class="hero-float" aria-hidden="true">
+    <span class="float-tag">PyTorch · Transformer</span>
+    <span class="float-tag">Isaac Sim · Genesis</span>
+    <span class="float-tag">Unity · ROS2</span>
+    <span class="float-tag">Diffusion Models</span>
+    <span class="float-tag">sim-to-real</span>
+  </div>
+</section>
+
+<!-- ===== About ===== -->
+<section id="about" class="section-white">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">About</div>
+      <h2>プロフィール</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>
+          ロボティクス×AIを専攻する大学院生。ロボットが意図を非言語的に伝える動作表現の研究を進めており、
+          拡散モデルを用いたモーション生成フレームワークの構築に取り組んでいます。
+        </p>
+        <p>
+          NHKロボコン・レスキューロボットコンテストでの大会経験を通じて、
+          ソフトウェアの設計力とチームで成果を出す実践力を培いました。
+          シミュレーションから実機まで、エンドツーエンドで実装できることを強みとしています。
+        </p>
+        <p>
+          独学でゲーム・AIアプリ・論文再現実装など幅広く制作しており、
+          学習と実装の往復を大切にしています。
+        </p>
+      </div>
+      <div class="stats-grid fade-up">
+        <div class="stat-card">
+          <div class="stat-num">🏆</div>
+          <div class="stat-lbl">消防庁長官賞</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3+</div>
+          <div class="stat-lbl">全国大会出場</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">Go2</div>
+          <div class="stat-lbl">sim-to-real 完遂</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2.16M</div>
+          <div class="stat-lbl">再現実装パラメータ数</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== 大会実績 ===== -->
 <section id="achievements">
   <div class="container">
-    <div class="section-label">Achievements</div>
-    <h2>大会実績</h2>
-    <p class="section-desc">ロボコンを中心とした大会での実績。ソフトウェア上位層の設計からチームリーダーまで。</p>
+    <div class="section-head">
+      <div class="section-label">Achievements</div>
+      <h2>大会実績</h2>
+      <p class="section-desc">ロボコンを中心とした大会での実績。ソフトウェア上位層の設計からチームリーダーまで。</p>
+    </div>
 
     <div class="achv">
 
       <!-- レスコン -->
-      <div class="achv-card award">
+      <div class="achv-card award fade-up">
         <div class="achv-head">
           <h3>レスキューロボットコンテスト 2024</h3>
-          <span class="result-badge gold">🏆 消防庁長官賞 受賞</span>
+          <span class="badge gold">🏆 消防庁長官賞 受賞</span>
         </div>
         <div class="achv-role">役割：チームリーダー ／ ロボット制御・通信システム開発</div>
         <p>
@@ -265,13 +617,19 @@
           <li>被救助者への負担を最小化する新機構が評価され受賞</li>
           <li>3機体を統合制御する通信システムをゼロから設計・実装</li>
         </ul>
+        <!-- YouTube URL が決まったら下のコメントを外して YOUR_VIDEO_ID を差し替え -->
+        <!--
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen loading="lazy"></iframe>
+        </div>
+        -->
       </div>
 
       <!-- NHKロボコン -->
-      <div class="achv-card">
+      <div class="achv-card fade-up">
         <div class="achv-head">
           <h3>NHKロボコン 2024</h3>
-          <span class="result-badge">全国大会出場（自チーム史上初）</span>
+          <span class="badge">全国大会出場（自チーム史上初）</span>
         </div>
         <div class="achv-role">役割：ソフトウェア上位層担当（Unity）</div>
         <p>
@@ -286,10 +644,10 @@
       </div>
 
       <!-- キャチロボ -->
-      <div class="achv-card">
+      <div class="achv-card fade-up">
         <div class="achv-head">
           <h3>キャチロボコンテスト</h3>
-          <span class="result-badge">シミュレーター自作で開発効率を大幅改善</span>
+          <span class="badge">シミュレーター自作で開発効率を大幅改善</span>
         </div>
         <div class="achv-role">役割：シミュレーター開発</div>
         <p>
@@ -303,43 +661,54 @@
 </section>
 
 <!-- ===== 研究 ===== -->
-<section id="research">
+<section id="research" class="section-white">
   <div class="container">
-    <div class="section-label">Research</div>
-    <h2>研究</h2>
-    <p class="section-desc">ロボットモーション生成と sim-to-real。シミュレーションの方策を実機で動かすところまで。</p>
+    <div class="section-head">
+      <div class="section-label">Research</div>
+      <h2>研究</h2>
+      <p class="section-desc">ロボットモーション生成と sim-to-real。シミュレーションの方策を実機で動かすところまで。</p>
+    </div>
 
     <div class="r-list">
 
-      <div class="r-item">
-        <span class="cat">現在の研究</span>
-        <h3>拡散モデルによるロボットモーション生成</h3>
-        <p>
-          Transformer を用いたロボットのモーション生成を研究。拡散モデルをコアに据えた
-          モーション生成フレームワークを構築し、ロボットが意図を非言語的に伝える
-          動作表現の実現を目指しています。学会発表を準備中。
-        </p>
+      <div class="r-item fade-up">
+        <div class="r-icon violet">🧬</div>
+        <div class="r-body">
+          <div class="cat">現在の研究</div>
+          <h3>拡散モデルによるロボットモーション生成</h3>
+          <p>
+            Transformer を用いたロボットのモーション生成を研究。拡散モデルをコアに据えた
+            モーション生成フレームワークを構築し、ロボットが意図を非言語的に伝える
+            動作表現の実現を目指しています。学会発表を準備中。
+          </p>
+        </div>
       </div>
 
-      <div class="r-item">
-        <span class="cat">Sim-to-Real</span>
-        <h3>Unitree Go2 の強化学習と実機展開</h3>
-        <p>
-          Isaac Sim・Genesis を用いた強化学習環境で Unitree Go2 の方策を学習し、
-          sim-to-real による各関節モーター制御の実機接続・実装まで完遂。
-          ドメインランダマイゼーションの設計とリワード関数のチューニングが
-          sim-to-real の成否を左右することを実践から習得しました。
-          オリジナル設計の倒立振子ロボットでの強化学習も実施。
-        </p>
+      <div class="r-item fade-up">
+        <div class="r-icon blue">🤖</div>
+        <div class="r-body">
+          <div class="cat">Sim-to-Real</div>
+          <h3>Unitree Go2 の強化学習と実機展開</h3>
+          <p>
+            Isaac Sim・Genesis を用いた強化学習環境で Unitree Go2 の方策を学習し、
+            sim-to-real による各関節モーター制御の実機接続・実装まで完遂。
+            ドメインランダマイゼーションの設計とリワード関数のチューニングが
+            sim-to-real の成否を左右することを実践から習得しました。
+            オリジナル設計の倒立振子ロボットでの強化学習も実施。
+          </p>
+        </div>
       </div>
 
-      <div class="r-item">
-        <span class="cat">学部研究</span>
-        <h3>脳卒中患者向け上肢訓練機器のシステム改修</h3>
-        <p>
-          学部時代はリハビリテーション機器の研究に従事。訓練効果の向上と
-          機器の機械的評価を可能にするソフトウェアシステムを開発しました。
-        </p>
+      <div class="r-item fade-up">
+        <div class="r-icon green">🏥</div>
+        <div class="r-body">
+          <div class="cat">学部研究</div>
+          <h3>脳卒中患者向け上肢訓練機器のシステム改修</h3>
+          <p>
+            学部時代はリハビリテーション機器の研究に従事。訓練効果の向上と
+            機器の機械的評価を可能にするソフトウェアシステムを開発しました。
+          </p>
+        </div>
       </div>
 
     </div>
@@ -349,118 +718,273 @@
 <!-- ===== 制作物 ===== -->
 <section id="works">
   <div class="container">
-    <div class="section-label">Works</div>
-    <h2>制作物</h2>
-    <p class="section-desc">個人開発・論文再現実装など。AIとインタラクション、モーション技術の実験場。</p>
+    <div class="section-head">
+      <div class="section-label">Works</div>
+      <h2>制作物</h2>
+      <p class="section-desc">個人開発・論文再現実装など。AIとインタラクション、モーション技術の実験場。</p>
+    </div>
 
-    <div class="work-list">
+    <div class="work-grid">
 
-      <div class="work-item">
-        <div class="work-head">
-          <h3>Emotion Avatar</h3>
-          <span class="cat">キャラクターAI ／ Unity + Python</span>
+      <!-- Emotion Avatar (featured) -->
+      <div class="work-card wide fade-up">
+        <div class="wide-inner">
+          <div>
+            <div class="work-card-icon">💬</div>
+            <h3>Emotion Avatar</h3>
+            <div class="work-cat">キャラクターAI ／ Unity + Python</div>
+            <p>
+              「関係性を築けるキャラクター」を目指した感情アバターアプリ。Russell感情円環と
+              Ekman 6基本感情・信頼・親密度を統合した感情モデルを設計し、Unity と
+              Python（FastAPI + PyTorch）を WebSocket でリアルタイム接続。
+              GRU による時系列記憶と VAE による動作の個体差表現まで設計しています。
+            </p>
+            <div class="tag-list">
+              <span class="tag">Unity</span>
+              <span class="tag">C#</span>
+              <span class="tag">Python</span>
+              <span class="tag">FastAPI</span>
+              <span class="tag">PyTorch</span>
+              <span class="tag">WebSocket</span>
+              <span class="tag">GRU</span>
+              <span class="tag">VAE</span>
+            </div>
+          </div>
+          <!-- デモ動画プレースホルダー — YouTube URL が決まったら iframe に差し替え -->
+          <div>
+            <div class="video-wrap" style="margin-top:0">
+              <div class="video-placeholder">
+                <div class="play-icon">▶</div>
+                <div>デモ動画（準備中）</div>
+              </div>
+              <!-- <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen loading="lazy"></iframe> -->
+            </div>
+          </div>
         </div>
-        <p>
-          「関係性を築けるキャラクター」を目指した感情アバターアプリ。Russell感情円環と
-          Ekman 6基本感情、信頼・親密度を統合した感情モデルを設計し、Unity と
-          Python (FastAPI + PyTorch) を WebSocket でリアルタイム接続。
-          GRU による時系列記憶と VAE による動作の個体差表現まで設計しています。
-        </p>
       </div>
 
-      <div class="work-item">
-        <div class="work-head">
-          <h3>ROBOcustom</h3>
-          <span class="cat">ゲーム開発 ／ Unity + C#</span>
-        </div>
+      <!-- ROBOcustom -->
+      <div class="work-card fade-up">
+        <div class="work-card-icon">⚔️</div>
+        <h3>ROBOcustom</h3>
+        <div class="work-cat">ゲーム開発 ／ Unity + C#</div>
         <p>
           ロボットカスタマイズ × ビジュアルプログラミングのバトルゲーム。
           自作ノードエディタでロボットの行動ロジックを組み、AI同士のバトルで撃破数を競います。
           ゲームAI・物理判定・アイテムシステムを実装。
         </p>
+        <div class="tag-list">
+          <span class="tag">Unity</span>
+          <span class="tag">C#</span>
+          <span class="tag">Node Editor</span>
+          <span class="tag">Game AI</span>
+        </div>
       </div>
 
-      <div class="work-item">
-        <div class="work-head">
-          <h3>HuMoT 再現実装</h3>
-          <span class="cat">論文再現 ／ PyTorch</span>
-        </div>
+      <!-- HuMoT -->
+      <div class="work-card fade-up">
+        <div class="work-card-icon">🔬</div>
+        <h3>HuMoT 再現実装</h3>
+        <div class="work-cat">論文再現 ／ PyTorch</div>
         <p>
-          トポロジー非依存のモーションリターゲティング Transformer (arXiv:2305.18897) を、
-          公式コード非公開の中 PyTorch でフルスクラッチ再現。XCiT ブロックから学習ループ、
+          トポロジー非依存のモーションリターゲティング Transformer（arXiv:2305.18897）を、
+          公式コード非公開の中 PyTorch でフルスクラッチ再現。XCiT ブロックから学習ループ・
           テスト一式まで約216万パラメータのモデルを実装しました。
         </p>
+        <div class="tag-list">
+          <span class="tag">PyTorch</span>
+          <span class="tag">Transformer</span>
+          <span class="tag">XCiT</span>
+          <span class="tag">Motion Retargeting</span>
+        </div>
       </div>
 
-      <div class="work-item">
-        <div class="work-head">
-          <h3>MoST (CVPR 2024) の Windows 移植</h3>
-          <span class="cat">学習環境構築 ／ PyTorch + CUDA</span>
-        </div>
+      <!-- MoST -->
+      <div class="work-card fade-up">
+        <div class="work-card-icon">🎨</div>
+        <h3>MoST（CVPR 2024）Windows 移植</h3>
+        <div class="work-cat">学習環境構築 ／ PyTorch + CUDA</div>
         <p>
           モーションスタイル変換モデル MoST を Linux 前提の公式環境から
           Windows + RTX 4060 Ti へ移植。CUDA 非互換の解決、コードパッチ、
           データ前処理から GPU 学習の検証まで完了しました。
         </p>
+        <div class="tag-list">
+          <span class="tag">PyTorch</span>
+          <span class="tag">CUDA</span>
+          <span class="tag">Windows</span>
+          <span class="tag">Motion Style</span>
+        </div>
       </div>
 
-      <div class="work-item">
-        <div class="work-head">
-          <h3>TripoSplat ローカル運用</h3>
-          <span class="cat">3D生成 ／ 3D Gaussian Splatting</span>
-        </div>
+      <!-- TripoSplat -->
+      <div class="work-card fade-up">
+        <div class="work-card-icon">✨</div>
+        <h3>TripoSplat ローカル運用</h3>
+        <div class="work-cat">3D生成 ／ 3D Gaussian Splatting</div>
         <p>
           1枚の画像から 3D Gaussian Splat（最大26万個）を生成するモデルを
-          ローカルGPUにセットアップし、画像→3D生成パイプラインを構築・運用しています。
+          ローカル GPU にセットアップし、画像 → 3D 生成パイプラインを構築・運用しています。
         </p>
+        <div class="tag-list">
+          <span class="tag">3DGS</span>
+          <span class="tag">PyTorch</span>
+          <span class="tag">CUDA</span>
+          <span class="tag">RTX 4060 Ti</span>
+        </div>
+      </div>
+
+      <!-- SONIC on Isaac Lab -->
+      <div class="work-card fade-up">
+        <div class="work-card-icon">🦾</div>
+        <h3>SONIC on Isaac Lab（Windows 移植）</h3>
+        <div class="work-cat">強化学習 ／ Isaac Lab 2.3.2</div>
+        <p>
+          GEAR-SONIC を Windows ネイティブ Isaac Lab 2.3.2 で動作検証。
+          Linux 前提の依存ライブラリ・パスの問題を Windows 向けにパッチし、
+          シミュレーション環境を安定稼働させました。
+        </p>
+        <div class="tag-list">
+          <span class="tag">Isaac Lab</span>
+          <span class="tag">Python</span>
+          <span class="tag">Windows</span>
+          <span class="tag">強化学習</span>
+        </div>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ===== スキル ===== -->
-<section id="skills">
+<!-- ===== Skills ===== -->
+<section id="skills" class="section-white">
   <div class="container">
-    <div class="section-label">Skills</div>
-    <h2>スキル</h2>
-    <p class="section-desc">研究・大会・個人開発で実際に使ってきた技術です。</p>
+    <div class="section-head">
+      <div class="section-label">Skills</div>
+      <h2>スキル</h2>
+      <p class="section-desc">研究・大会・個人開発で実際に使ってきた技術です。</p>
+    </div>
 
-    <table class="skill-table">
-      <tr>
-        <th>Python / PyTorch</th>
-        <td>研究室で日常的に使用。Transformer・GAN・拡散モデルによるモーション生成モデルの実装と学習パイプライン構築。</td>
-      </tr>
-      <tr>
-        <th>ROS2</th>
-        <td>ロボコン・授業を通じて使用。トピック・アクション通信を用いたロボット開発の実務経験。</td>
-      </tr>
-      <tr>
-        <th>Isaac Sim / Genesis</th>
-        <td>Unitree Go2・オリジナル倒立振子ロボットの強化学習環境として使用。Genesis では sim-to-real で実機モーター制御まで完遂。</td>
-      </tr>
-      <tr>
-        <th>Unity / C#</th>
-        <td>NHKロボコンの自動走行GUI・行動計画エディタ・通信アプリ、キャチロボの自作シミュレーター、個人ゲーム開発。</td>
-      </tr>
-      <tr>
-        <th>Arduino / C++</th>
-        <td>マイコンプログラムの作成・組み込み開発。</td>
-      </tr>
-      <tr>
-        <th>環境構築 / CUDA</th>
-        <td>研究モデルの Windows GPU 環境への移植、依存関係の解決、生成モデルのローカル運用。</td>
-      </tr>
-    </table>
+    <div class="skill-grid">
+
+      <div class="skill-card fade-up">
+        <div class="skill-card-head">
+          <div class="skill-card-ico">🧠</div>
+          <h3>AI / 機械学習</h3>
+        </div>
+        <p>Transformer・GAN・拡散モデルによるモーション生成モデルの実装と学習パイプライン構築。研究室で日常的に使用。</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">Transformer</span>
+          <span class="skill-tag">Diffusion Models</span>
+          <span class="skill-tag">VAE / GRU</span>
+          <span class="skill-tag">CUDA</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up">
+        <div class="skill-card-head">
+          <div class="skill-card-ico">🤖</div>
+          <h3>ロボット / シミュレーション</h3>
+        </div>
+        <p>Unitree Go2・倒立振子ロボットの強化学習 → sim-to-real 完遂。ROS2 によるロボット開発の実務経験あり。</p>
+        <div class="skill-tags">
+          <span class="skill-tag">ROS2</span>
+          <span class="skill-tag">Isaac Sim</span>
+          <span class="skill-tag">Genesis</span>
+          <span class="skill-tag">強化学習</span>
+          <span class="skill-tag">sim-to-real</span>
+          <span class="skill-tag">Arduino / C++</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up">
+        <div class="skill-card-head">
+          <div class="skill-card-ico">🎮</div>
+          <h3>ゲーム / GUI 開発</h3>
+        </div>
+        <p>NHKロボコンの自動走行 GUI・行動計画エディタ・通信アプリ、キャチロボのシミュレーター、個人ゲーム開発。</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Unity</span>
+          <span class="skill-tag">C#</span>
+          <span class="skill-tag">WebSocket</span>
+          <span class="skill-tag">FastAPI</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-up">
+        <div class="skill-card-head">
+          <div class="skill-card-ico">⚙️</div>
+          <h3>環境構築 / インフラ</h3>
+        </div>
+        <p>研究モデルの Windows GPU 環境への移植、CUDA 依存関係の解決、生成モデルのローカル運用。</p>
+        <div class="skill-tags">
+          <span class="skill-tag">CUDA 環境構築</span>
+          <span class="skill-tag">Windows 移植</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">C++</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
+<!-- ===== Contact ===== -->
+<section id="contact">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Contact</div>
+      <h2>連絡先</h2>
+      <p class="section-desc">研究・プロジェクト・共同開発など、お気軽にご連絡ください。</p>
+    </div>
+    <div class="contact-row">
+      <a class="contact-card" href="mailto:koufuku293@gmail.com">
+        <div class="cc-ico">✉️</div>
+        <div class="cc-lbl">Email</div>
+        <div class="cc-val">koufuku293@gmail.com</div>
+      </a>
+      <a class="contact-card" href="https://github.com/funitec" target="_blank" rel="noopener">
+        <div class="cc-ico">🐙</div>
+        <div class="cc-lbl">GitHub</div>
+        <div class="cc-val">github.com/funitec</div>
+      </a>
+      <a class="contact-card" href="https://x.com/wHgWIQWQhkSpXA4" target="_blank" rel="noopener">
+        <div class="cc-ico">𝕏</div>
+        <div class="cc-lbl">X (Twitter)</div>
+        <div class="cc-val">@wHgWIQWQhkSpXA4</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
 <footer>
   <div class="container">
-    <p>Contact: <a href="mailto:koufuku293@gmail.com">koufuku293@gmail.com</a> ／ <a href="https://x.com/wHgWIQWQhkSpXA4" target="_blank" rel="noopener">X (Twitter)</a></p>
-    <p style="margin-top:8px;">© 2026 Portfolio</p>
+    <p>© 2026 funitec — Robotics × AI Engineer &nbsp;·&nbsp; <a href="mailto:koufuku293@gmail.com">koufuku293@gmail.com</a></p>
   </div>
 </footer>
 
+<script>
+  // Nav: shadow on scroll
+  const nav = document.getElementById('main-nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Nav: mobile toggle
+  const toggle = document.getElementById('nav-toggle');
+  const links  = document.getElementById('nav-links');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+
+  // Scroll-in animation
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
 </body>
 </html>
