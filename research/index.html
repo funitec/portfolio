@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研究 | 福田晃己 Portfolio</title>
+<meta name="description" content="キャラクターの一貫性と感情を分離したモーションスタイル生成の研究。二軸分離の定式化、モデル設計、定量評価、フィジカルAIへの展開までをまとめた研究詳細ページ。">
+<meta property="og:title" content="研究 — モーション生成とフィジカル AI | 福田晃己">
+<meta property="og:description" content="キャラクター性と感情を独立した潜在軸に分離してモーションを生成する研究の詳細。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html"><span aria-hidden="true">←</span> TOP へ</a>
+    <div class="eyebrow">Research / Motion Generation × Physical AI</div>
+    <h1>ロボットとキャラクターの<br>「動作表現」をつくる</h1>
+    <p class="sub">
+      人が動きから受け取る情報は、「誰が動いているか」と「どんな気持ちで動いているか」に分けられます。
+      この 2 つを<strong>独立した潜在軸として分離し、任意の組み合わせで動きを生成する</strong>ことを主題に、
+      生成モデルの設計から実機ロボットでの検証までを一人で実装しています。
+    </p>
+    <dl class="meta">
+      <div><dt>MAIN THEME</dt><dd>キャラクターの一貫性と感情を分離したモーションスタイル生成</dd></div>
+      <div><dt>APPROACH</dt><dd>Transformer + 拡散モデル / 潜在空間の分離</dd></div>
+      <div><dt>IMPLEMENTATION</dt><dd>PyTorch フルスクラッチ（既存実装の改造ではない）</dd></div>
+      <div><dt>STATUS</dt><dd>学会発表を準備中</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap">
+
+    <section class="block">
+      <h2 data-n="01">何を解こうとしているか</h2>
+      <p>
+        既存のモーションスタイル変換は、スタイルを<strong>1 つのまとまり</strong>として扱います。
+        「怒っているゾンビ歩き」を作りたいとき、スタイルが 1 軸しかないと
+        「ゾンビらしさ」と「怒り」のどちらかしか指定できません。
+      </p>
+      <p>
+        しかしキャラクターに動きを与える立場で考えると、この 2 つは別々に制御したいものです。
+        <strong>同じキャラクターは感情が変わっても同一人物と分かる必要があり、
+        同じ感情は誰が演じても伝わる必要がある</strong>からです。
+        そこでスタイルを「キャラクター性 <code>z_char</code>」と「感情 <code>z_emo</code>」の 2 軸に分解し、
+        学習データに存在しない組み合わせでも生成できる枠組みを目指しました。
+      </p>
+
+      <figure class="fig wide" style="margin:30px 0 26px">
+        <img src="../assets/img/style-grid.svg" width="950" height="484" loading="lazy"
+             alt="単調な歩行モーションを、キャラクターの軸と感情の軸の組み合わせで9通りのスタイルに変換した図">
+        <figcaption>
+          やっていること：<strong>1 つの動作</strong>を、<strong>キャラクター性（縦）</strong>と
+          <strong>感情（横）</strong>の組み合わせで別々のスタイルに作り替える
+        </figcaption>
+      </figure>
+
+      <p>
+        下図はその処理の流れです。動作内容とスタイル参照を別経路で受け取り、
+        参照クリップを差し替えるだけで組み合わせを変えられる構成になっています。
+      </p>
+
+      <figure class="fig wide" style="margin:22px 0 8px">
+        <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="コンテンツ動作・キャラクター参照・感情参照の3入力から、内容エンコーダとスタイルエンコーダを経てデコーダが新しいモーションを生成する構成図">
+          <defs>
+            <marker id="ra" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 Z" fill="#98A2B6"/>
+            </marker>
+          </defs>
+          <!-- inputs -->
+          <rect x="8" y="16" width="132" height="46" rx="9" fill="rgba(255,255,255,.03)" stroke="#2C3444" stroke-width="1.3"/>
+          <text x="74" y="36" text-anchor="middle" font-size="11.5" font-weight="700" fill="#E9ECF3" font-family="sans-serif">コンテンツ動作</text>
+          <text x="74" y="52" text-anchor="middle" font-size="10.5" fill="#98A2B6" font-family="monospace">WALK / RUN / PUNCH</text>
+
+          <rect x="8" y="98" width="132" height="46" rx="9" fill="rgba(46,230,197,.07)" stroke="#2EE6C5" stroke-width="1.3"/>
+          <text x="74" y="118" text-anchor="middle" font-size="11.5" font-weight="700" fill="#2EE6C5" font-family="sans-serif">キャラ参照</text>
+          <text x="74" y="134" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="monospace">NINJA / ROBOT ...</text>
+
+          <rect x="8" y="180" width="132" height="46" rx="9" fill="rgba(108,140,255,.07)" stroke="#6C8CFF" stroke-width="1.3"/>
+          <text x="74" y="200" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6C8CFF" font-family="sans-serif">感情参照</text>
+          <text x="74" y="216" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="monospace">HAPPY / ANGRY ...</text>
+
+          <!-- encoders -->
+          <rect x="188" y="16" width="140" height="46" rx="9" fill="rgba(255,255,255,.03)" stroke="#2C3444" stroke-width="1.3"/>
+          <text x="258" y="41" text-anchor="middle" font-size="12" font-weight="700" fill="#E9ECF3" font-family="monospace">CONTENT ENC.</text>
+
+          <rect x="188" y="98" width="140" height="128" rx="9" fill="rgba(255,255,255,.03)" stroke="#2C3444" stroke-width="1.3"/>
+          <text x="258" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#E9ECF3" font-family="monospace">STYLE ENC.</text>
+          <rect x="204" y="142" width="108" height="30" rx="7" fill="rgba(46,230,197,.1)" stroke="#2EE6C5" stroke-width="1.2"/>
+          <text x="258" y="162" text-anchor="middle" font-size="12" font-weight="700" fill="#2EE6C5" font-family="monospace">z_char (64)</text>
+          <rect x="204" y="180" width="108" height="30" rx="7" fill="rgba(108,140,255,.1)" stroke="#6C8CFF" stroke-width="1.2"/>
+          <text x="258" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#6C8CFF" font-family="monospace">z_emo (64)</text>
+
+          <!-- decoder -->
+          <rect x="382" y="70" width="132" height="106" rx="9" fill="rgba(176,140,255,.07)" stroke="#B08CFF" stroke-width="1.4"/>
+          <text x="448" y="112" text-anchor="middle" font-size="11.5" font-weight="700" fill="#B08CFF" font-family="monospace">DECODER</text>
+          <text x="448" y="130" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="sans-serif">スタイル変調</text>
+          <text x="448" y="145" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="sans-serif">Transformer</text>
+
+          <!-- output -->
+          <rect x="562" y="70" width="130" height="106" rx="9" fill="rgba(240,193,75,.07)" stroke="#F0C24B" stroke-width="1.4"/>
+          <text x="627" y="110" text-anchor="middle" font-size="11.5" font-weight="700" fill="#F0C24B" font-family="sans-serif">生成モーション</text>
+          <text x="627" y="130" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="monospace">WALK × NINJA</text>
+          <text x="627" y="144" text-anchor="middle" font-size="10.5" fill="#C4CBD9" font-family="monospace">× ANGRY</text>
+
+          <line x1="140" y1="39"  x2="186" y2="39"  stroke="#98A2B6" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="140" y1="121" x2="186" y2="130" stroke="#2EE6C5" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="140" y1="203" x2="186" y2="196" stroke="#6C8CFF" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="328" y1="39"  x2="380" y2="88"  stroke="#98A2B6" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="312" y1="157" x2="380" y2="120" stroke="#2EE6C5" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="312" y1="195" x2="380" y2="150" stroke="#6C8CFF" stroke-width="1.4" marker-end="url(#ra)"/>
+          <line x1="514" y1="123" x2="560" y2="123" stroke="#98A2B6" stroke-width="1.4" marker-end="url(#ra)"/>
+        </svg>
+        <figcaption>動作内容とスタイル 2 軸を別経路で受け取り、デコーダで合成する。参照クリップを差し替えるだけで組み合わせを変えられる</figcaption>
+      </figure>
+    </section>
+
+    <section class="block">
+      <h2 data-n="02">生成結果のデモ</h2>
+      <p>
+        学習したモデルで、指定した「動作内容 × キャラクター × 感情」のモーションを生成した様子です。
+        可視化ツールも自作しており、参照クリップを選び直すとその場で再推論して結果が切り替わります。
+      </p>
+      <div class="vfacade" data-embed="https://drive.google.com/file/d/1AbBff4EknmM37pMbkGvV2QcQ9D5hjUtY/preview" role="button" tabindex="0" aria-label="モーション生成のデモ動画を再生" style="max-width:760px;margin-top:20px">
+        <div class="wglyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M12 6.5v5.5M12 12l-4 9M12 12l4 9M7 9l5 1.6L17 9"/></svg>
+          <span>MOTION GENERATION DEMO</span>
+        </div>
+        <div class="play" aria-hidden="true">▶</div>
+        <div class="vlbl">PLAY — 生成モーション</div>
+      </div>
+      <p class="cap" style="margin-top:12px">自作の three.js ビューアで生成結果を再生したもの</p>
+    </section>
+
+    <section class="block">
+      <h2 data-n="03">研究テーマ</h2>
+      <div class="tgrid">
+
+        <a class="tcard lead" href="motion-style.html">
+          <span class="badge cyan">MAIN — 大学院研究</span>
+          <h3>キャラクター性と感情を<br>分離したモーション生成</h3>
+          <p>
+            2 軸分離の定式化、モデル設計、学習が破綻した原因の特定と対策、
+            自作の定量評価指標まで。研究の中身をいちばん詳しく書いています。
+          </p>
+          <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+        </a>
+
+        <a class="tcard" href="physical-ai.html">
+          <span class="badge blue">PHYSICAL AI</span>
+          <h3>強化学習と sim-to-real<br>による実機ロボット制御</h3>
+          <p>
+            四足ロボット Unitree Go2 の歩行方策を強化学習で獲得し実機へ展開。
+            ヒューマノイド全身制御のシミュレーション環境構築も含みます。
+          </p>
+          <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+        </a>
+
+        <a class="tcard" href="rehab.html">
+          <span class="badge">学部研究</span>
+          <h3>リハビリ機器の改修と<br>訓練支援ゲーム</h3>
+          <p>
+            脳卒中患者向け上肢訓練機器のシステム改修と機械的評価、
+            訓練を継続したくなる体験設計への取り組み。
+          </p>
+          <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 data-n="04">研究基盤</h2>
+      <p>
+        研究を進めるうえで必要な学習データ・計算環境・可視化ツールは、既存のものに頼らず自分で整えています。
+        <strong>試行回数を増やせる状態を作ること自体が研究の速度を決める</strong>という考えからです。
+      </p>
+      <dl class="kv">
+        <dt>DATASETS</dt>
+        <dd>
+          キャラクター性・感情のラベルを持つ複数のモーションキャプチャデータセット（俳優・キャラクター別／感情別／スタイル別）を用途に応じて使用。
+          <strong>関節定義・フレームレート・座標系が異なるため、共通スケルトンへ揃える前処理を自作</strong>しています。
+        </dd>
+        <dt>REPRESENTATION</dt>
+        <dd>
+          <strong>21 関節の統一スケルトン</strong>に正規化し、各フレームを「全関節位置＋回転＋ルート軌跡」の <code>151</code> 次元ベクトルで表現。
+          既存実装との数値一致（誤差 <code>1e-7</code> 未満）を検証してから研究に使っています。
+        </dd>
+        <dt>TRAINING</dt>
+        <dd>
+          自宅の単一 GPU（16GB）で <strong>30 万イテレーション規模の学習</strong>を運用。
+          TensorBoard への全損失記録、学習の自動レジューム、外部 PC へフォルダごと持ち出して学習を再開できるスクリプト群を整備しました。
+        </dd>
+        <dt>VISUALIZATION</dt>
+        <dd>
+          <strong>three.js の自作ビューア</strong>で、内容・キャラ参照・感情参照・生成結果を 4 面同時に再生。
+          潜在空間を PCA で可視化する画面、外部の BVH モーションを取り込んで入力にできる機能、
+          任意の 3D キャラクターへリターゲットして表示する機能も実装しています。
+        </dd>
+        <dt>EVALUATION</dt>
+        <dd>
+          「見た目が自然か」を主観で判断せずに済むよう、<strong>評価指標とスクリプトを自作</strong>。
+          実データ分布からの逸脱、骨長の安定性、軌跡のドリフト、潜在空間のクラス内／クラス間分散などを数値で追跡しています。
+        </dd>
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2 data-n="05">研究を支える実装・環境構築</h2>
+      <p>
+        研究テーマそのものに加えて、先行手法を自分の環境で動かし比較できる状態を作る作業も継続して行っています。
+        いずれも制作物ページに詳細があります。
+      </p>
+      <ul class="side-list" style="max-width:520px">
+        <li><a href="../works/humot.html">論文のみからの Transformer 再現実装（HuMoT） <span aria-hidden="true">→</span></a></li>
+        <li><a href="../works/most.html">先行手法 MoST の Windows GPU 環境への移植 <span aria-hidden="true">→</span></a></li>
+        <li><a href="../works/sonic-isaaclab.html">ヒューマノイド全身制御の学習環境構築（Isaac Lab） <span aria-hidden="true">→</span></a></li>
+        <li><a href="../works/avatarchat.html">研究成果を対話アバターへ応用（AvatarChat） <span aria-hidden="true">→</span></a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="ページ移動">
+      <a class="prev" href="../index.html"><div class="dir">← BACK</div><div class="ttl">TOP ページ</div></a>
+      <a class="next" href="motion-style.html"><div class="dir">NEXT →</div><div class="ttl">キャラクター性と感情を分離したモーション生成</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

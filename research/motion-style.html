@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>キャラクター性と感情を分離したモーション生成 | 福田晃己 Portfolio</title>
+<meta name="description" content="キャラクター性 z_char と感情 z_emo を独立した潜在軸に分離し、学習データに存在しない組み合わせのモーションを生成する研究。定式化・モデル設計・失敗の原因究明・定量評価まで。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="index.html"><span aria-hidden="true">←</span> 研究トップへ</a>
+    <div class="eyebrow">Main Research / 大学院研究</div>
+    <h1>キャラクター性と感情を<br>分離したモーション生成</h1>
+    <p class="sub">
+      「そのキャラクターらしさ」と「感情表現」を独立した潜在軸に分離し、
+      <strong>学習データに存在しない組み合わせのモーションを生成する</strong>研究です。
+      モデルはフルスクラッチ実装で、破綻の原因究明と対策を定量指標で回しながら改良を重ねています。
+    </p>
+    <div class="chips">
+      <span class="chip key">PyTorch</span><span class="chip key">Transformer</span><span class="chip key">拡散モデル</span>
+      <span class="chip">潜在空間の分離</span><span class="chip">敵対的学習</span><span class="chip">自己教師あり学習</span><span class="chip">three.js</span>
+    </div>
+    <dl class="meta">
+      <div><dt>GOAL</dt><dd>未学習の「キャラ × 感情」組合せでの動作生成</dd></div>
+      <div><dt>LATENT</dt><dd>z_char (64 次元) × z_emo (64 次元)</dd></div>
+      <div><dt>SCALE</dt><dd>約 3,000 クリップ / 30 万イテレーション級の学習</dd></div>
+      <div><dt>STATUS</dt><dd>学会発表を準備中</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">問題設定</h2>
+        <p>
+          モーションスタイル変換の先行研究では、スタイルは<strong>1 つのまとまった属性</strong>として扱われます。
+          ところがキャラクターに動きを与える現場では、指定したいものが少なくとも 2 つあります。
+        </p>
+        <ul class="pts">
+          <li><strong>キャラクター性</strong>：喜んでいても怒っていても「同じキャラクターだ」と分かる、その人固有の動きの癖</li>
+          <li><strong>感情</strong>：誰が演じても「喜んでいる」と伝わる、感情由来の動きの変化</li>
+        </ul>
+        <p style="margin-top:16px">
+          スタイルが 1 軸のままだと、この 2 つを別々に指定できません。
+          「ゾンビらしさは保ったまま、感情だけ喜びに変える」といった操作ができないため、
+          <strong>スタイルを 2 軸に分解して独立に制御する</strong>ことを研究の主題に置きました。
+        </p>
+        <figure class="fig wide" style="margin:26px 0">
+          <img src="../assets/img/style-grid.svg" width="950" height="484" loading="lazy"
+               alt="単調な歩行モーションを、キャラクターの軸と感情の軸の組み合わせで9通りのスタイルに変換した図">
+          <figcaption>
+            同じ「歩く」動作に、<strong>キャラクター性（縦）</strong>と<strong>感情（横）</strong>を
+            別々に付与して生成する
+          </figcaption>
+        </figure>
+        <div class="note">
+          <b>研究の動機：</b>ロボットやキャラクターが意図を言葉以外で伝えるには、動作表現の制御が要になります。
+          「キャラクターの一貫性」と「感情の伝達」は本来別の要求であり、
+          <strong>まとめて扱う限りどちらかが犠牲になる</strong>のではないか、という問題意識が出発点です。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">データの制約と定式化</h2>
+        <p>
+          この問題には、データ側に厄介な制約があります。入手できるモーションキャプチャデータは
+          <strong>キャラクター別のもの</strong>と<strong>感情別のもの</strong>が別々に存在し、
+          「このキャラクターがこの感情で動いている」という<strong>両方のラベルを同時に持つクリップがほとんど存在しません</strong>。
+        </p>
+        <p>
+          そこで、片方の軸しかラベルを持たないクリップに対して、
+          <strong>もう一方の軸には「中立クラス」を割り当てて完全な教師データとして扱う</strong>定式化にしました。
+          キャラクター側は 9 種のキャラクタースタイル＋中立、感情側は 6 種の感情＋中立で構成しています。
+        </p>
+        <p>
+          この定式化のもとでは、学習中に一度も見ていない
+          「<strong>キャラも感情も中立でない組み合わせ</strong>」を生成することが最終目標になります。
+          つまり<strong>正解データが原理的に存在しない領域での生成</strong>が本質的な難所であり、
+          これが後述する破綻の主因にもなりました。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">モデル構成</h2>
+        <p>
+          既存実装の改造ではなく、データローダから学習ループまで PyTorch でフルスクラッチ実装しています。
+        </p>
+        <dl class="kv">
+          <dt>CONTENT ENC.</dt>
+          <dd>動作内容を抽出する Transformer。<strong>時間方向の正規化でスタイル成分を落とし</strong>、「何をしているか」だけを残す</dd>
+          <dt>STYLE ENC.</dt>
+          <dd>参照クリップから attention pooling で <code>z_char</code>（64 次元）と <code>z_emo</code>（64 次元）を別々に抽出</dd>
+          <dt>DECODER</dt>
+          <dd>内容特徴を受け取り、<strong>2 つの潜在で変調（AdaLN / ゼロ初期化）</strong>しながらモーションを再構成する Transformer</dd>
+          <dt>DISENTANGLE</dt>
+          <dd>各潜在に対する<strong>分類ヘッド</strong>（自軸のラベルを当てる）と、<strong>勾配反転による交差分類ヘッド</strong>（他軸のラベルを当てられないようにする）を併設</dd>
+          <dt>LOSSES</dt>
+          <dd>再構成、サイクル一貫性（スタイル／内容）、逆サイクル再構成、ルート軌跡アンカー、骨長一貫性、出力空間でのスタイル分類</dd>
+          <dt>MANIFOLD</dt>
+          <dd>フレーム単位の<strong>ポーズ識別器</strong>（hinge 損失 + R1 正則化）で「未見の組合せでも各フレームは自然な人間の姿勢」を強制</dd>
+        </dl>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">破綻の原因究明と改良の経緯</h2>
+        <p>
+          この研究でいちばん時間を使ったのは、モデルを増やすことではなく
+          <strong>「なぜ壊れているのか」を切り分ける作業</strong>でした。実際の経緯を順に記します。
+        </p>
+
+        <ol class="tl">
+          <li>
+            <div class="step">ISSUE 01 — 転送経路が発散</div>
+            <h3>再構成は成功しているのに、組み合わせを変えると出力が飛ぶ</h3>
+            <p>
+              再構成誤差も潜在の分類精度も良好（分類精度 1.00、交差分類は偶然一致水準）なのに、
+              参照を差し替えた生成結果はルート軌跡が毎フレーム数 m 飛び、関節位置も人体から外れました。
+            </p>
+            <p>
+              原因は明快で、<strong>転送経路の出力には直接の再構成型損失が一つも掛かっていなかった</strong>ためです。
+              正解が存在しない組み合わせなので、素朴には損失を書けません。
+            </p>
+          </li>
+          <li class="fix">
+            <div class="step">FIX 01</div>
+            <h3>正解がない出力を、間接的に拘束する</h3>
+            <p>
+              ①<strong>逆サイクル再構成</strong>（生成結果から元のスタイルへ戻したら元クリップに一致すること）、
+              ②<strong>ルート軌跡アンカー</strong>、③<strong>骨長一貫性</strong>を追加。
+              骨長は最初は重みが弱く、生成結果の骨が実データの約 4 倍に伸びてしまったため、
+              <strong>正規化前の実スケールで測る損失に組み替え</strong>ました。
+            </p>
+          </li>
+          <li>
+            <div class="step">ISSUE 02 — 姿勢が大破する</div>
+            <h3>「全身が折れたように見える」を数値にする</h3>
+            <p>
+              見た目の破綻は主観では議論できないため、<strong>実データ分布からの逸脱を測る指標を自作</strong>しました
+              （生成した各フレームの姿勢が、実データの姿勢集合からどれだけ離れているか）。
+              結果、実データ同士 4.5cm・再構成 6.7cm に対し、
+              <strong>転送出力は実在する組み合わせでも 17〜20cm 外れている</strong>ことが判明しました。
+            </p>
+          </li>
+          <li>
+            <div class="step">DIAGNOSIS — 決定的な切り分け</div>
+            <h3>参照クリップを「自分自身」にするか「同ラベルの別クリップ」にするかで結果が変わる</h3>
+            <p>
+              参照に入力自身を使うと誤差 1.3cm（再構成と同等）。ところが
+              <strong>同じラベルの別クリップから潜在を取ると 14.3cm に崩壊</strong>しました。
+              つまり問題はデコーダでも分離でもなく、<strong>潜在のクラス内ばらつき</strong>——
+              クリップ固有の情報が <code>z</code> に混入し、デコーダがそれに過敏になっていたことでした。
+            </p>
+            <p>
+              潜在の統計を測ると、クラス内分散がクラス間分散を上回っていました（分散比 1.32）。
+              <strong>分類精度 1.00 は「軸が分離できている」ことしか保証せず、
+              「同じクラスの潜在が互換であること」はどの損失も拘束していなかった</strong>のです。
+            </p>
+          </li>
+          <li class="fix">
+            <div class="step">FIX 02</div>
+            <h3>同ラベルの潜在を入れ替えても復元できるように学習する</h3>
+            <p>
+              <strong>同ラベル入替え教師</strong>（同じラベルの別クリップから取った潜在で元クリップを復元させる）と
+              <strong>クラス内の潜在引き寄せ</strong>を追加。結果、入替え時の誤差は 14.3cm → 0.52cm、
+              潜在の分散比は 1.32 → 0.022 まで下がり、<strong>潜在がほぼクラス埋め込みに収束</strong>しました。
+            </p>
+          </li>
+          <li>
+            <div class="step">ISSUE 03 — 敵対ヘッドの発散</div>
+            <h3>潜在を急に動かす損失と勾配反転の併用で学習が壊れる</h3>
+            <p>
+              入替え教師を入れた直後、勾配反転側の損失が 2.5 → 169 に発散しました。
+              潜在空間の再編成に敵対ヘッドが追従できず、
+              <strong>「自信を持って誤分類させて損失を稼ぐ」退化解</strong>に落ちていました。
+              損失に上限を設けて超過時は勾配を止め、重みを下げることで安定させました。
+            </p>
+          </li>
+          <li class="fix">
+            <div class="step">FIX 03</div>
+            <h3>未見の組み合わせに「人間の姿勢らしさ」を課す</h3>
+            <p>
+              残っていた「ねじれ」に対し、軌跡を除いた姿勢のみを見る
+              <strong>フレーム単位のポーズ識別器</strong>を追加。実データ分布からの逸脱は
+              20.6cm → 16.1cm に改善し、生成結果の構造は目視でも大きく安定しました。
+            </p>
+          </li>
+          <li>
+            <div class="step">REMAINING — 現在取り組んでいる課題</div>
+            <h3>スタイルの効きが弱く、時間方向の特徴が転送されない</h3>
+            <p>
+              構造が安定した一方で、<strong>出力が動作内容側に強く引っ張られ</strong>、
+              腕の振りや前傾といったスタイル表現が十分に出ません。
+              また「ロボットらしいカクカクした動き」のような<strong>時間方向のテクスチャが転送されない</strong>——
+              これは時間方向にプーリングした 64 次元の潜在では時間構造を原理的に持てないためです。
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="block">
+        <h2 data-n="05">定量評価</h2>
+        <p>
+          主観評価に頼らないため、評価スクリプトも自作しました。以下は改良前後の主要指標です。
+        </p>
+        <div class="tbl">
+          <table class="mt">
+            <thead>
+              <tr><th>指標</th><th>改良前</th><th>改良後</th><th>打った対策</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="lbl">同ラベル参照での復元誤差</td>
+                <td class="n was">14.3 cm</td><td class="n up">0.52 cm</td>
+                <td>同ラベル入替え教師</td>
+              </tr>
+              <tr>
+                <td class="lbl">潜在のクラス内 / クラス間分散比</td>
+                <td class="n was">1.32</td><td class="n up">0.022</td>
+                <td>クラス内引き寄せ</td>
+              </tr>
+              <tr>
+                <td class="lbl">実データ分布からの逸脱（未見組合せ）</td>
+                <td class="n was">20.6 cm</td><td class="n up">16.1 cm</td>
+                <td>ポーズ識別器</td>
+              </tr>
+              <tr>
+                <td class="lbl">骨長のばらつき（変動係数）</td>
+                <td class="n was">8.9 %</td><td class="n up">0.0 %</td>
+                <td>骨長損失＋推論時の階層リスケール</td>
+              </tr>
+              <tr>
+                <td class="lbl">ルート軌跡のドリフト</td>
+                <td class="n was">0.039 m/f</td><td class="n up">0.010 m/f</td>
+                <td>軌跡の再構成拘束</td>
+              </tr>
+              <tr>
+                <td class="lbl">目標スタイルへの分類一致率</td>
+                <td class="n was">0.98</td><td class="n up">1.00</td>
+                <td>出力空間のスタイル分類</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:18px">
+          最後の指標が示すとおり<strong>スタイル転送自体は機能している</strong>一方、
+          実データ分布からの逸脱は実データ同士の 4.5cm にはまだ届いていません。
+          <strong>未見の組み合わせ領域が残った課題である</strong>ことを、この指標で明確に切り分けられています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="06">アーキテクチャの改良</h2>
+        <p>
+          「スタイルの効きが弱い」「時間方向の特徴が入らない」という課題に対しては、
+          損失の調整ではなく<strong>構造側で解く</strong>方針で新しいモデルを実装しました。
+        </p>
+        <ul class="pts">
+          <li><strong>身体部位ごとのトークン化</strong>：全身をひとまとめに扱わず、体幹・両腕・両脚・ルートに分けた「部位 × フレーム」の格子として扱う</li>
+          <li><strong>部位別のスタイル注入</strong>：各部位のトークンが自部位のスタイルトークンのみを参照する cross-attention により、<strong>フレームごと・部位ごとにキャラ性と感情の配合が変わる</strong>局所的な注入を実現</li>
+          <li><strong>部位ドロップアウトによる自己教師</strong>：学習中に内容側の部位をランダムに欠落させ、<strong>欠けた部位はスタイル参照から復元せざるを得ない</strong>状況を作ることで、スタイル主導の生成を直接学習させる</li>
+          <li><strong>速度情報の明示入力</strong>：フレーム間差分をスタイルエンコーダに与え、「カクカク感」のような高周波の時間構造を捉えられるようにする</li>
+          <li><strong>推論時のスタイル主導指定</strong>：「腕だけスタイル主導」といった部位単位の制御をノブとして用意（腕を指定すると腕が 7cm 変化し脚は 0.19cm しか動かない、という局所性を確認済み）</li>
+        </ul>
+        <div class="note">
+          <b>実装上の落とし穴：</b>部位 × フレームの格子はトークン数が数倍になるため、
+          注意機構の呼び出しで<strong>注意行列を実体化させる設定が残っていただけで VRAM が 30GB に膨張</strong>し、
+          共有メモリへの退避で学習速度が 100 分の 1 になりました。
+          設定の修正と、勾配チェックポイントとバッチサイズの実測比較で解決しています。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="07">応用：言語指示からのリアルタイム生成</h2>
+        <p>
+          生成モデルを研究の中で閉じさせず、<strong>使える形にして初めて分かる課題を拾う</strong>ため、
+          言語指示からモーションを出すリアルタイム版も実装しました。
+        </p>
+        <ul class="pts">
+          <li>大規模なモーションデータセットから動作内容を検索できるライブラリを構築（約 6,000 窓）。多言語埋め込みを使い、<strong>日本語の指示から英語ラベルの動作を検索</strong>できる</li>
+          <li>学習済みモデルの潜在をクラス平均として<strong>スタイルパレット化</strong>し、推論時は内容エンコーダとデコーダの 2 回のフォワードだけで済ませる</li>
+          <li>実測でサーバ内 25〜45ms、ブラウザ体感で平均 230ms 程度。「悲しそうにギターを弾いて」のような指示が動きになる</li>
+          <li>この応用は対話アバター（<a href="../works/avatarchat.html" style="color:var(--acc)">AvatarChat</a>）へ組み込み、言葉と動きのトーンを揃える形で利用している</li>
+        </ul>
+        <div class="note">
+          <b>応用してから分かったこと：</b>体感品質を決めたのは生成モデルの精度よりも
+          <strong>応答が返るまでの待ち時間</strong>でした。研究の評価指標だけを見ていると気づけない観点で、
+          「使う形にしてから評価する」ことの価値を実感しています。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="08">この研究で身についたこと</h2>
+        <ul class="pts">
+          <li><strong>指標がなければ改善は空回りする</strong>：「見た目が変」を数値化する指標を作った時点で、原因の切り分けが一気に進んだ</li>
+          <li><strong>高い精度は目的の達成を意味しない</strong>：潜在分類精度 1.00 は「分離」しか保証せず、本当に必要だった「同クラス潜在の互換性」は別の損失でしか担保できなかった</li>
+          <li><strong>敵対的学習は他の損失との相互作用で壊れる</strong>：潜在空間を急に動かす損失と併用すると退化解に落ちる、という具体的な挙動を経験した</li>
+          <li><strong>損失で殴る前に構造を疑う</strong>：時間構造が入らない問題は損失調整では解けず、表現の持ち方（トークン化の粒度）を変える必要があった</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>SUMMARY</h4>
+        <ul class="pts">
+          <li>スタイルを 2 軸に分離して独立制御</li>
+          <li>正解データが無い領域の生成が本質的な難所</li>
+          <li>自作の定量指標で原因を切り分けて改良</li>
+          <li>フルスクラッチ実装・可視化・評価まで一人で構築</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>RELATED</h4>
+        <ul class="side-list">
+          <li><a href="index.html">研究トップ <span aria-hidden="true">→</span></a></li>
+          <li><a href="physical-ai.html">強化学習 / sim-to-real <span aria-hidden="true">→</span></a></li>
+          <li><a href="../works/humot.html">HuMoT 再現実装 <span aria-hidden="true">→</span></a></li>
+          <li><a href="../works/most.html">MoST Windows 移植 <span aria-hidden="true">→</span></a></li>
+          <li><a href="../works/avatarchat.html">AvatarChat <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="ページ移動">
+      <a class="prev" href="index.html"><div class="dir">← PREV</div><div class="ttl">研究トップ</div></a>
+      <a class="next" href="physical-ai.html"><div class="dir">NEXT →</div><div class="ttl">強化学習と sim-to-real による実機ロボット制御</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

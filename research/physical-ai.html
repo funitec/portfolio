@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>強化学習と sim-to-real による実機ロボット制御 | 福田晃己 Portfolio</title>
+<meta name="description" content="四足ロボット Unitree Go2 の歩行方策を強化学習で獲得し実機制御へ展開（sim-to-real）。自作倒立振子ロボットでの学習、ヒューマノイド全身制御の環境構築も含む研究。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="index.html"><span aria-hidden="true">←</span> 研究トップへ</a>
+    <div class="eyebrow">Physical AI / Reinforcement Learning</div>
+    <h1>強化学習と sim-to-real による<br>実機ロボット制御</h1>
+    <p class="sub">
+      シミュレーションで獲得した方策を<strong>実機で本当に動かすところまで</strong>やることを重視して取り組んでいます。
+      四足ロボットの歩行方策の sim-to-real、自作ロボットでの学習、
+      ヒューマノイド全身制御のシミュレーション環境構築が主な内容です。
+    </p>
+    <div class="chips">
+      <span class="chip key">強化学習</span><span class="chip key">sim-to-real</span>
+      <span class="chip">Isaac Sim / Isaac Lab</span><span class="chip">Genesis</span>
+      <span class="chip">ドメインランダマイゼーション</span><span class="chip">報酬設計</span>
+    </div>
+    <dl class="meta">
+      <div><dt>PLATFORM</dt><dd>Unitree Go2（四足）/ 自作倒立振子ロボット</dd></div>
+      <div><dt>SIMULATOR</dt><dd>Genesis, Isaac Sim, Isaac Lab</dd></div>
+      <div><dt>SCOPE</dt><dd>方策学習 → 実機の関節モーター制御まで</dd></div>
+      <div><dt>ROLE</dt><dd>個人（環境構築 / 学習 / 実機検証）</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">なぜ実機までやるのか</h2>
+        <p>
+          主研究であるモーション生成は、出力が「見た目として自然か」で評価されがちです。
+          しかし<strong>実際の身体で成立するかどうかは別の問題</strong>で、接地や重心が破綻していても
+          映像としては自然に見えることがあります。
+        </p>
+        <p>
+          この差を体で理解しておきたかったため、シミュレーションで学習した方策を
+          <strong>実機のモーター制御まで持っていく</strong>ことを自分の課題に据えました。
+          生成側と制御側の両方を触れることが、研究の判断材料になると考えています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">四足ロボットの歩行方策（sim-to-real）</h2>
+        <p>
+          Genesis および Isaac Sim 上で四足ロボット Unitree Go2 の歩行方策を強化学習で獲得し、
+          実機の関節モーター制御への展開まで実施しました。
+        </p>
+        <ul class="pts">
+          <li><strong>学習環境の構築</strong>：ロボットモデル・観測・行動空間・報酬を定義し、並列環境で方策を学習</li>
+          <li><strong>ドメインランダマイゼーション</strong>：摩擦・質量・外乱などを学習中にばらつかせ、実機との差に耐える方策を作る</li>
+          <li><strong>報酬関数のチューニング</strong>：前進速度だけを報酬にすると不自然な歩容に収束するため、姿勢・接地・エネルギーの項を組み合わせて調整</li>
+          <li><strong>実機での検証</strong>：シミュレーションで安定していた方策が実機ではどう崩れるかを確認しながら反復</li>
+        </ul>
+        <div class="note">
+          <b>実機で分かったこと：</b>sim-to-real の成否を分けたのは方策の学習アルゴリズムそのものより、
+          <strong>ドメインランダマイゼーションの設計と報酬関数の重み</strong>でした。
+          シミュレーション上の性能を上げる調整と、実機で崩れない調整は別物だという感覚は、
+          実機を触らないと得られなかったと思います。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">自作ロボットでの強化学習</h2>
+        <p>
+          既製のロボットだけでなく、<strong>オリジナル設計の倒立振子ロボット</strong>でも強化学習を実施しました。
+          自分で機体を設計すると、質量分布やモーター特性といったパラメータを自分で把握できるため、
+          <strong>シミュレーションと実機の差がどこから来るのかを切り分けやすい</strong>という利点があります。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">ヒューマノイド全身制御の環境構築</h2>
+        <p>
+          参照モーションをヒューマノイドに追従させる全身制御の枠組みを、
+          Windows ネイティブのシミュレーション環境で動作検証しました。
+          Linux 前提の依存関係をパッチし、可視化ありの実行とヘッドレス学習を同じ設定から切り替えられるよう整備しています
+          （詳細は <a href="../works/sonic-isaaclab.html" style="color:var(--acc)">制作物ページ</a>）。
+        </p>
+        <p>
+          この環境で方策が破綻するケースと安定するケースを見比べると、
+          <strong>参照モーションが物理的に無理をしている箇所ほど追従が崩れる</strong>という傾向がはっきり見えます。
+          これは主研究の生成モーションを評価する視点としてそのまま使えるものです。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="05">主研究とのつながり</h2>
+        <p>
+          モーション生成の評価に<strong>「物理シミュレータ上で追従できるか」という軸を持ち込める</strong>ことが、
+          この取り組みの一番の意味だと考えています。
+          見た目の自然さと物理的な妥当性を別々に測れることは、
+          生成モデルの改善方針を決めるうえで有効な材料になります。
+        </p>
+        <p>
+          将来的には、生成した動作を<strong>ロボットの参照軌道として与えて実機で再生する</strong>ところまでを
+          つなげたいと考えており、そのための足場としてこれらの環境を整えています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>SUMMARY</h4>
+        <ul class="pts">
+          <li>四足ロボットの歩行方策を実機制御まで展開</li>
+          <li>自作機体でも学習を実施し差分を切り分け</li>
+          <li>ヒューマノイド全身制御の環境を自力で構築</li>
+          <li>生成モーションの物理的妥当性を測る足場に</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>RELATED</h4>
+        <ul class="side-list">
+          <li><a href="index.html">研究トップ <span aria-hidden="true">→</span></a></li>
+          <li><a href="motion-style.html">モーション生成（主研究） <span aria-hidden="true">→</span></a></li>
+          <li><a href="../works/sonic-isaaclab.html">SONIC on Isaac Lab <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#achievements">ロボコン実績 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="ページ移動">
+      <a class="prev" href="motion-style.html"><div class="dir">← PREV</div><div class="ttl">キャラクター性と感情を分離したモーション生成</div></a>
+      <a class="next" href="rehab.html"><div class="dir">NEXT →</div><div class="ttl">リハビリ機器の改修と訓練支援ゲーム</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

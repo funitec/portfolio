@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>画像 → 3D 生成のローカル運用 | 福田晃己 Portfolio</title>
+<meta name="description" content="1枚の画像から3D Gaussian Splatや3Dモデルを生成するモデル（TripoSplat / TRELLIS.2）をローカルGPUに構築し、画像→3Dパイプラインとして運用。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">3D / Generative</div>
+    <h1>画像 → 3D 生成のローカル運用</h1>
+    <p class="sub">
+      1 枚の画像から 3D 表現を生成するモデルを、<strong>クラウドサービスに頼らず手元の GPU で動かす</strong>ための
+      環境を構築・運用しています。3D Gaussian Splatting 系のモデルと、ボクセル表現から
+      3D モデルを生成するモデルの 2 系統をセットアップしました。
+    </p>
+    <div class="chips">
+      <span class="chip key">3D Gaussian Splatting</span><span class="chip key">PyTorch</span><span class="chip key">CUDA</span>
+      <span class="chip">環境構築</span><span class="chip">生成 3D</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人（環境構築 / 運用）</dd></div>
+      <div><dt>MODELS</dt><dd>TripoSplat / TRELLIS.2</dd></div>
+      <div><dt>STACK</dt><dd>PyTorch 2.6 + CUDA 12.4 / Windows</dd></div>
+      <div><dt>INPUT → OUTPUT</dt><dd>1 枚の画像 → 3D Splat / 3D モデル</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">目的</h2>
+        <p>
+          ゲームやアバターの制作では 3D アセットの用意が常にボトルネックになります。
+          そこで、画像から 3D を生成するモデルが<strong>実制作で使える品質と手間に達しているのか</strong>を
+          自分で確かめるため、ローカル環境に構築して試せるようにしました。
+        </p>
+        <p>
+          Web サービスとして提供されているものもありますが、生成物の扱いや試行回数の制約を受けずに
+          検証したかったため、<strong>手元の GPU で完結する形</strong>を選んでいます。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">構築したもの</h2>
+        <ul class="pts">
+          <li><strong>3D Gaussian Splat 生成</strong>：1 枚の画像から大量のガウシアンで構成された 3D 表現を生成するモデルをローカル GPU にセットアップし、画像 → 3D のパイプラインとして運用</li>
+          <li><strong>ボクセル表現からの 3D モデル生成</strong>：数十億パラメータ規模の生成モデルを Windows 環境で構築し、ブラウザ UI から実行できる状態まで整備</li>
+          <li><strong>環境の分離</strong>：モデルごとに要求される依存関係が競合するため、仮想環境を分けて共存させた</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">環境構築の勘所</h2>
+        <p>
+          この種の生成モデルは、<strong>CUDA バージョン・注意機構の高速化ライブラリ・画像処理ライブラリの
+          バージョン組み合わせが厳しく</strong>、公式手順どおりでも Windows では素直に入りません。
+        </p>
+        <ul class="pts">
+          <li>高速化ライブラリが必須（無効化すると動作しない）ため、CUDA と PyTorch のバージョンから逆算して選定する</li>
+          <li>画像処理ライブラリは新しいバージョンで API が変わり動かなくなるため、動作するバージョンに固定する</li>
+          <li>導入手順が確定したら<strong>スクリプトとして残し、再構築できる状態にする</strong></li>
+        </ul>
+        <div class="note">
+          <b>方針：</b>「一度動いた」で終わらせず、手順をスクリプト化して<strong>別の PC でも再現できる形</strong>にしています。
+          研究の学習環境でも同じ方針を取っており、実際に外部 PC へ持ち出して学習を回せる構成を作りました。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">評価と使いどころ</h2>
+        <p>
+          実際に試した結果、生成される 3D は<strong>見た目の再現度は高い一方、そのままゲームアセットとして
+          使うにはリトポロジーやリグ付けが必要</strong>という感触でした。
+          プロトタイプの背景オブジェクトや、モデリングの下敷きとして使うのが現実的だと考えています。
+        </p>
+        <p>
+          自分で 3D モデルを作る立場（<a href="blender-modeling.html" style="color:var(--acc)">Blender モデリング</a>）から
+          生成結果を見られるため、「どこまでが自動化でき、どこから人の手が必要か」を具体的に判断できる点は
+          この検証で得た収穫です。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>生成 3D モデルをローカル GPU で運用</li>
+          <li>依存関係が厳しい環境を再構築可能な形に</li>
+          <li>制作者視点で実用性を評価</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="blender-modeling.html">Blender モデリング <span aria-hidden="true">→</span></a></li>
+          <li><a href="most.html">MoST Windows 移植 <span aria-hidden="true">→</span></a></li>
+          <li><a href="sonic-isaaclab.html">SONIC on Isaac Lab <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="blender-modeling.html"><div class="dir">← PREV</div><div class="ttl">Blender キャラクターモデリング</div></a>
+      <a class="next" href="slime-adventure.html"><div class="dir">NEXT →</div><div class="ttl">SlimeAdventure</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

@@ -3,988 +3,676 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Robotics × AI Engineer</title>
+<title>福田晃己 | Robotics × AI Portfolio</title>
+<meta name="description" content="ロボティクス×AIを専攻する大学院生 福田晃己のポートフォリオ。モーション生成モデルの研究、ロボコンでの自動制御・チーム開発、Unityでのゲーム・ツール開発。">
+<meta property="og:title" content="福田晃己 | Robotics × AI Portfolio">
+<meta property="og:description" content="モーション生成の研究から実機ロボット・ゲーム開発まで。ロボティクス×AI専攻 大学院生のポートフォリオ。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f6f8fc;
-    --bg-card: #ffffff;
-    --border: #e2e8f0;
-    --text: #0f172a;
-    --text-sub: #64748b;
-    --accent: #6366f1;
-    --accent-2: #8b5cf6;
-    --accent-soft: #eef2ff;
-    --gold: #d97706;
-    --gold-soft: #fffbeb;
-    --radius: 16px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-md: 0 4px 16px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.04);
-    --shadow-lg: 0 20px 48px rgba(0,0,0,.13);
-  }
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
-    font-size: 16px;
-    line-height: 1.85;
-    overflow-x: hidden;
-  }
-
-  .container { max-width: 900px; margin: 0 auto; padding: 0 28px; }
-
-  /* ===== Navigation ===== */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 200;
-    background: rgba(255,255,255,0.80);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(226,232,240,0.7);
-    height: 58px;
-    display: flex; align-items: center;
-    padding: 0 28px;
-    justify-content: space-between;
-    transition: box-shadow .3s;
-  }
-  nav.scrolled { box-shadow: var(--shadow-md); }
-  .nav-logo {
-    font-size: .95rem; font-weight: 900;
-    background: linear-gradient(130deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -.02em;
-    text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 4px; list-style: none; }
-  .nav-links a {
-    text-decoration: none; color: var(--text-sub);
-    font-size: .87rem; font-weight: 600;
-    padding: 6px 13px; border-radius: 8px;
-    transition: color .2s, background .2s;
-  }
-  .nav-links a:hover { color: var(--accent); background: var(--accent-soft); }
-  .nav-toggle {
-    display: none; background: none; border: none;
-    font-size: 1.35rem; cursor: pointer; color: var(--text);
-    padding: 4px 8px;
-  }
-
-  /* ===== Hero ===== */
-  .hero {
-    min-height: 100svh;
-    background: linear-gradient(145deg, #0d0b22 0%, #1e1b4b 40%, #2d1b69 70%, #1a1040 100%);
-    display: flex; align-items: center;
-    position: relative; overflow: hidden;
-    padding: 100px 0 72px;
-  }
-  /* Animated glow blobs */
-  .blob {
-    position: absolute; border-radius: 50%;
-    filter: blur(90px); pointer-events: none;
-  }
-  .blob-1 {
-    width: 520px; height: 520px;
-    background: radial-gradient(circle at center, rgba(99,102,241,.28), transparent 70%);
-    top: -120px; left: -120px;
-    animation: blobMove 10s ease-in-out infinite;
-  }
-  .blob-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle at center, rgba(139,92,246,.22), transparent 70%);
-    bottom: -80px; right: -80px;
-    animation: blobMove 10s ease-in-out infinite reverse;
-    animation-delay: -5s;
-  }
-  .blob-3 {
-    width: 280px; height: 280px;
-    background: radial-gradient(circle at center, rgba(6,182,212,.18), transparent 70%);
-    top: 40%; left: 55%;
-    animation: blobMove 14s ease-in-out infinite;
-    animation-delay: -7s;
-  }
-  @keyframes blobMove {
-    0%, 100% { transform: translate(0,0) scale(1); }
-    33%       { transform: translate(28px,-18px) scale(1.06); }
-    66%       { transform: translate(-18px,14px) scale(.95); }
-  }
-
-  /* Grid pattern overlay */
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
-
-  .hero-inner { position: relative; z-index: 1; }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: .78rem; font-weight: 700;
-    color: #a5b4fc; letter-spacing: .1em; text-transform: uppercase;
-    background: rgba(99,102,241,.12);
-    border: 1px solid rgba(99,102,241,.28);
-    border-radius: 999px; padding: 5px 16px;
-    margin-bottom: 28px;
-  }
-  .hero-tag .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #818cf8;
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: .5; transform: scale(.8); }
-  }
-
-  .hero h1 {
-    font-size: clamp(2.1rem, 6.5vw, 3.6rem);
-    font-weight: 900; color: #fff;
-    line-height: 1.28; letter-spacing: -.025em;
-    margin-bottom: 26px;
-  }
-  .hero h1 .grad {
-    background: linear-gradient(135deg, #818cf8 0%, #c4b5fd 50%, #67e8f9 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 1.05rem; color: #94a3b8;
-    max-width: 580px; margin-bottom: 36px; line-height: 2;
-  }
-
-  .hero-badges { display: flex; flex-direction: column; gap: 12px; margin-bottom: 44px; }
-  .hbadge {
-    display: inline-flex; align-items: center; gap: 13px;
-    font-size: .97rem; font-weight: 600; color: #e2e8f0;
-  }
-  .hbadge .ico {
-    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-    display: grid; place-items: center; font-size: 1.1rem;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.12);
-  }
-  .hbadge.award .ico { background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.35); }
-  .hbadge.award { color: #fcd34d; }
-
-  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-  .btn {
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    font-size: .92rem; font-weight: 700;
-    padding: 11px 24px; border-radius: 10px;
-    transition: transform .2s, box-shadow .2s, background .2s;
-    cursor: pointer; border: none; line-height: 1;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
-    box-shadow: 0 4px 18px rgba(99,102,241,.42);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(99,102,241,.55); }
-  .btn-ghost {
-    background: rgba(255,255,255,.08);
-    color: #e2e8f0; border: 1px solid rgba(255,255,255,.18);
-  }
-  .btn-ghost:hover { background: rgba(255,255,255,.14); transform: translateY(-1px); }
-
-  /* Floating tags (desktop only) */
-  .hero-float {
-    position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 10px; pointer-events: none;
-  }
-  .float-tag {
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-    border-radius: 999px; padding: 7px 18px;
-    font-size: .78rem; font-weight: 600; color: #cbd5e1;
-    white-space: nowrap;
-    animation: floatY 5s ease-in-out infinite;
-  }
-  .float-tag:nth-child(2) { animation-delay: -1.6s; margin-left: 14px; }
-  .float-tag:nth-child(3) { animation-delay: -3.2s; }
-  .float-tag:nth-child(4) { animation-delay: -4.8s; margin-left: 10px; }
-  .float-tag:nth-child(5) { animation-delay: -2.4s; }
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-9px); }
-  }
-
-  /* ===== Section base ===== */
-  section { padding: 88px 0; }
-  .section-head { margin-bottom: 48px; }
-  .section-label {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-size: .75rem; font-weight: 700; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
-  }
-  .section-label::before {
-    content: ""; display: block; width: 22px; height: 2px; border-radius: 1px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  }
-  h2 {
-    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-    font-weight: 900; letter-spacing: -.025em; margin-bottom: 12px;
-  }
-  .section-desc { color: var(--text-sub); max-width: 580px; font-size: .97rem; }
-
-  .section-white { background: #fff; }
-
-  /* ===== About ===== */
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 52px; align-items: start;
-  }
-  .about-text p { color: var(--text-sub); margin-bottom: 16px; font-size: .97rem; }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .stat-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 22px 20px; text-align: center;
-    box-shadow: var(--shadow-sm);
-    transition: transform .2s, box-shadow .2s;
-  }
-  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .stat-num {
-    font-size: 1.9rem; font-weight: 900; line-height: 1; margin-bottom: 6px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .stat-lbl { font-size: .78rem; color: var(--text-sub); font-weight: 700; letter-spacing: .02em; }
-
-  /* ===== Achievement cards ===== */
-  .achv { display: flex; flex-direction: column; gap: 24px; }
-  .achv-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 36px 40px;
-    box-shadow: var(--shadow-sm);
-    position: relative; overflow: hidden;
-    transition: transform .25s, box-shadow .25s;
-  }
-  .achv-card::after {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    transform: scaleX(0); transform-origin: left; transition: transform .35s;
-  }
-  .achv-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-  .achv-card:hover::after { transform: scaleX(1); }
-  .achv-card.award {
-    border-left: 4px solid #f59e0b;
-    background: linear-gradient(160deg, #fff 80%, #fffef5 100%);
-  }
-  .achv-card.award::after { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-
-  .achv-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-  .achv-head h3 { font-size: 1.2rem; font-weight: 800; }
-  .badge {
-    font-size: .78rem; font-weight: 700;
-    padding: 4px 14px; border-radius: 999px;
-    background: var(--accent-soft); color: var(--accent);
-  }
-  .badge.gold {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    color: #92400e;
-    box-shadow: 0 2px 8px rgba(245,158,11,.22);
-  }
-  .achv-role {
-    font-size: .86rem; color: var(--text-sub); font-weight: 500;
-    margin-bottom: 14px; padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .achv-card > p { color: var(--text); font-size: .96rem; margin-bottom: 14px; }
-  .achv-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .achv-card ul li {
-    color: var(--text-sub); font-size: .92rem;
-    padding-left: 1.6em; position: relative;
-  }
-  .achv-card ul li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
-
-  /* Video embed */
-  .video-wrap {
-    position: relative; padding-bottom: 56.25%;
-    border-radius: 12px; overflow: hidden;
-    background: #0f172a; margin-top: 24px;
-    box-shadow: var(--shadow-md);
-  }
-  .video-wrap iframe {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%; border: none;
-  }
-  .video-placeholder {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-    background: linear-gradient(135deg, #1e1b4b, #312e81);
-    color: #a5b4fc; font-size: .88rem; text-align: center; padding: 24px;
-  }
-  .play-icon {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: rgba(99,102,241,.28); border: 2px solid rgba(99,102,241,.5);
-    display: grid; place-items: center; font-size: 1.4rem;
-  }
-
-  /* ===== Research ===== */
-  .r-list { display: flex; flex-direction: column; gap: 20px; }
-  .r-item {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 30px 36px;
-    box-shadow: var(--shadow-sm);
-    display: grid; grid-template-columns: 56px 1fr; gap: 0 24px; align-items: start;
-    transition: transform .2s, box-shadow .2s;
-  }
-  .r-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .r-icon {
-    width: 52px; height: 52px; border-radius: 14px;
-    display: grid; place-items: center; font-size: 1.45rem;
-    margin-top: 2px;
-  }
-  .r-icon.violet { background: linear-gradient(135deg, #eef2ff, #ede9fe); }
-  .r-icon.blue   { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
-  .r-icon.green  { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
-  .r-body .cat {
-    font-size: .76rem; font-weight: 700; letter-spacing: .09em;
-    text-transform: uppercase; color: var(--text-sub); margin-bottom: 5px;
-  }
-  .r-body h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; }
-  .r-body p  { color: var(--text-sub); font-size: .94rem; }
-
-  /* ===== Works ===== */
-  .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-
-  .work-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px 30px;
-    box-shadow: var(--shadow-sm);
-    transition: transform .25s, box-shadow .25s, border-color .25s;
-    position: relative;
-  }
-  .work-card:hover {
-    transform: translateY(-5px); box-shadow: var(--shadow-lg);
-    border-color: rgba(99,102,241,.3);
-  }
-  .work-card-icon {
-    width: 46px; height: 46px; border-radius: 12px;
-    display: grid; place-items: center; font-size: 1.3rem;
-    background: linear-gradient(135deg, var(--accent-soft), #ede9fe);
-    margin-bottom: 14px;
-  }
-  .work-card h3 { font-size: 1.07rem; font-weight: 800; margin-bottom: 4px; }
-  .work-cat { font-size: .8rem; color: var(--text-sub); font-weight: 600; margin-bottom: 10px; }
-  .work-card p { color: var(--text-sub); font-size: .89rem; line-height: 1.78; margin-bottom: 14px; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag {
-    font-size: .73rem; font-weight: 600; padding: 3px 9px;
-    border-radius: 6px; background: var(--bg); border: 1px solid var(--border);
-    color: var(--text-sub);
-  }
-
-  /* Featured card (full width) */
-  .work-card.wide { grid-column: 1 / -1; }
-  .wide-inner {
-    display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start;
-  }
-
-  /* ===== Skills ===== */
-  .skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .skill-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 26px 30px;
-    box-shadow: var(--shadow-sm);
-    transition: transform .2s, box-shadow .2s;
-  }
-  .skill-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .skill-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .skill-card-ico {
-    width: 40px; height: 40px; border-radius: 10px;
-    display: grid; place-items: center; font-size: 1.1rem;
-    background: linear-gradient(135deg, var(--accent-soft), #ede9fe); flex-shrink: 0;
-  }
-  .skill-card-head h3 { font-size: .97rem; font-weight: 700; }
-  .skill-card p { font-size: .87rem; color: var(--text-sub); margin-bottom: 14px; line-height: 1.75; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .skill-tag {
-    font-size: .75rem; font-weight: 600; padding: 4px 11px;
-    border-radius: 7px;
-    background: linear-gradient(135deg, var(--accent-soft), #ede9fe);
-    color: var(--accent); border: 1px solid rgba(99,102,241,.18);
-  }
-
-  /* ===== Contact ===== */
-  #contact {
-    background: linear-gradient(145deg, #0d0b22 0%, #1e1b4b 50%, #1a1040 100%);
-  }
-  #contact .section-label { color: #a5b4fc; }
-  #contact .section-label::before { background: linear-gradient(90deg, #818cf8, #c4b5fd); }
-  #contact h2 { color: #fff; }
-  #contact .section-desc { color: #94a3b8; }
-  .contact-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-  .contact-card {
-    text-decoration: none; color: #e2e8f0;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-    border-radius: var(--radius); padding: 28px 20px; text-align: center;
-    transition: background .2s, transform .2s, border-color .2s;
-  }
-  .contact-card:hover {
-    background: rgba(255,255,255,.12); transform: translateY(-3px);
-    border-color: rgba(99,102,241,.4);
-  }
-  .contact-card .cc-ico { font-size: 1.8rem; margin-bottom: 10px; }
-  .contact-card .cc-lbl {
-    font-size: .74rem; font-weight: 700; letter-spacing: .1em;
-    text-transform: uppercase; color: #64748b; margin-bottom: 4px;
-  }
-  .contact-card .cc-val { font-size: .9rem; font-weight: 600; word-break: break-all; }
-
-  /* ===== Footer ===== */
-  footer {
-    background: #07060f; padding: 32px 0;
-    text-align: center; color: #475569; font-size: .87rem;
-  }
-  footer a { color: #818cf8; text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
-
-  /* ===== Scroll-in animation ===== */
-  .fade-up {
-    opacity: 0; transform: translateY(26px);
-    transition: opacity .6s ease, transform .6s ease;
-  }
-  .fade-up.in { opacity: 1; transform: translateY(0); }
-  .fade-up:nth-child(2) { transition-delay: .08s; }
-  .fade-up:nth-child(3) { transition-delay: .16s; }
-  .fade-up:nth-child(4) { transition-delay: .24s; }
-  .fade-up:nth-child(5) { transition-delay: .32s; }
-
-  /* ===== Responsive ===== */
-  @media (max-width: 820px) {
-    .hero-float { display: none; }
-    .about-grid { grid-template-columns: 1fr; gap: 36px; }
-    .wide-inner  { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 640px) {
-    .nav-links { display: none; }
-    .nav-links.open {
-      display: flex; flex-direction: column;
-      position: absolute; top: 58px; left: 0; right: 0;
-      background: rgba(255,255,255,.97);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-    }
-    .nav-toggle { display: block; }
-    .work-grid  { grid-template-columns: 1fr; }
-    .skill-grid { grid-template-columns: 1fr; }
-    .contact-row { grid-template-columns: 1fr; }
-    .r-item { grid-template-columns: 1fr; }
-    .r-icon { margin-bottom: 12px; }
-    .achv-card { padding: 24px 20px; }
-    section { padding: 64px 0; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 420px) {
-    .hero h1 { font-size: 1.95rem; }
-    .hero-btns { flex-direction: column; align-items: flex-start; }
-    .stats-grid { grid-template-columns: 1fr; }
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
 
-<!-- ===== Nav ===== -->
-<nav id="main-nav">
-  <a href="#top" class="nav-logo">funitec</a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#achievements">実績</a></li>
-    <li><a href="#research">研究</a></li>
-    <li><a href="#works">制作物</a></li>
-    <li><a href="#skills">スキル</a></li>
-    <li><a href="#contact">Contact</a></li>
+<div class="progress"></div>
+
+<!-- ===================== nav ===================== -->
+<nav class="nav">
+  <a class="nav-logo" href="#top"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="#profile">PROFILE</a></li>
+    <li><a href="#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="#research">RESEARCH</a></li>
+    <li><a href="#works">WORKS</a></li>
+    <li><a href="#skills">SKILLS</a></li>
+    <li><a href="#contact">CONTACT</a></li>
   </ul>
-  <button class="nav-toggle" id="nav-toggle" aria-label="メニュー">☰</button>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
 </nav>
 
-<!-- ===== Hero ===== -->
-<section class="hero" id="top">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="hero-grid"></div>
-
-  <div class="container">
+<!-- ===================== hero ===================== -->
+<header class="hero" id="top">
+  <canvas id="skeleton" aria-hidden="true"></canvas>
+  <div class="wrap">
     <div class="hero-inner">
-      <div class="hero-tag"><span class="dot"></span>Robotics × AI &nbsp;—&nbsp; Motion Generation / Sim-to-Real</div>
-      <h1>ロボットの「動き」を<br><span class="grad">つくる。</span><br>シミュレーションから実機まで。</h1>
-      <p class="hero-sub">
-        Transformer・拡散モデルによるロボットモーション生成を研究。強化学習の方策設計から
-        実機モーター制御、開発を支えるツール製作まで一気通貫で取り組んでいます。
+      <div class="eyebrow">Motion Generation / Physical AI</div>
+      <h1>ロボットの<span class="lit">「動き」</span>を、<br>研究から実機まで。</h1>
+      <p class="hero-lead">
+        Transformer と拡散モデルによるモーション生成の研究を軸に、ロボコンでの自動制御・チーム開発、
+        Unity でのゲーム・ツール開発まで。シミュレーションと現実をつなぐ実装を手を動かして進めています。
       </p>
-      <div class="hero-badges">
-        <span class="hbadge award"><span class="ico">🏆</span>レスキューロボットコンテスト2024 消防庁長官賞 受賞</span>
-        <span class="hbadge"><span class="ico">🤖</span>NHKロボコン2024 全国大会出場（自チーム史上初）</span>
-        <span class="hbadge"><span class="ico">⚙️</span>Unitree Go2 強化学習 → 実機制御（sim-to-real）完遂</span>
+      <div class="hero-id">
+        <b>福田 晃己</b><span>Robotics × AI 専攻 — 大学院生</span>
+      </div>
+      <div class="hero-facts">
+        <div class="fact g"><i>AWARD</i>レスキューロボットコンテスト 消防庁長官賞 受賞</div>
+        <div class="fact b"><i>NATIONAL</i>NHK ロボコン 2024 全国大会出場（チーム史上初）</div>
+        <div class="fact c"><i>SIM2REAL</i>Unitree Go2 の強化学習方策を実機制御まで展開</div>
       </div>
       <div class="hero-btns">
-        <a class="btn btn-primary" href="#achievements">大会実績を見る</a>
-        <a class="btn btn-ghost" href="#works">制作物</a>
-        <a class="btn btn-ghost" href="https://github.com/funitec" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn btn-fill" href="#works">制作物を見る<span aria-hidden="true">→</span></a>
+        <a class="btn" href="#research">研究内容</a>
+        <a class="btn" href="https://github.com/funitec" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
   </div>
 
-  <div class="hero-float" aria-hidden="true">
-    <span class="float-tag">PyTorch · Transformer</span>
-    <span class="float-tag">Isaac Sim · Genesis</span>
-    <span class="float-tag">Unity · ROS2</span>
-    <span class="float-tag">Diffusion Models</span>
-    <span class="float-tag">sim-to-real</span>
+  <!-- live read-out of the style transfer happening in the canvas -->
+  <div class="style-hud" data-state="input" aria-hidden="true">
+    <div class="sh-state"></div>
+    <div class="sh-rows">
+      <div class="sh-row"><span>MOTION</span><b>WALK</b></div>
+      <div class="sh-row"><span>z_char</span><b data-hud="char">—</b></div>
+      <div class="sh-row"><span>z_emo</span><b data-hud="emo">—</b></div>
+    </div>
+    <div class="sh-bar"><i></i></div>
+    <p class="sh-note">単調な歩行にスタイルを付与しています</p>
   </div>
-</section>
 
-<!-- ===== About ===== -->
-<section id="about" class="section-white">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">About</div>
+  <div class="hero-scroll" aria-hidden="true">SCROLL</div>
+</header>
+
+<main>
+
+<!-- ===================== profile ===================== -->
+<section class="sec alt" id="profile">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">01 / Profile</div>
       <h2>プロフィール</h2>
     </div>
-    <div class="about-grid">
-      <div class="about-text fade-up">
+    <div class="prof-grid">
+      <div class="prof-text rv">
         <p>
-          ロボティクス×AIを専攻する大学院生。ロボットが意図を非言語的に伝える動作表現の研究を進めており、
-          拡散モデルを用いたモーション生成フレームワークの構築に取り組んでいます。
+          ロボティクス×AI を専攻する大学院生です。ロボットやキャラクターが意図を言葉以外で伝える
+          <strong>「動作表現」</strong>に関心があり、拡散モデルを用いたモーション生成フレームワークの研究に取り組んでいます。
         </p>
         <p>
-          NHKロボコン・レスキューロボットコンテストでの大会経験を通じて、
-          ソフトウェアの設計力とチームで成果を出す実践力を培いました。
-          シミュレーションから実機まで、エンドツーエンドで実装できることを強みとしています。
+          大学ではロボットプロジェクトに所属し、<strong>メインプログラマー</strong>として NHK ロボコン・
+          レスキューロボットコンテストに出場。少人数チームのマネジメントとソフトウェア開発を並行して担い、
+          <strong>NHK ロボコン全国大会出場（チーム史上初）</strong>、<strong>レスコン消防庁長官賞受賞</strong>という結果につなげました。
         </p>
         <p>
-          独学でゲーム・AIアプリ・論文再現実装など幅広く制作しており、
-          学習と実装の往復を大切にしています。
+          研究・大会と並行して、ゲーム・AI アプリ・論文再現実装を独学で制作。
+          学習パイプラインの構築から実機・製品側の実装まで、<strong>エンドツーエンドで手を動かせること</strong>が強みです。
         </p>
       </div>
-      <div class="stats-grid fade-up">
-        <div class="stat-card">
-          <div class="stat-num">🏆</div>
-          <div class="stat-lbl">消防庁長官賞</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">3+</div>
-          <div class="stat-lbl">全国大会出場</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">Go2</div>
-          <div class="stat-lbl">sim-to-real 完遂</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">2.16M</div>
-          <div class="stat-lbl">再現実装パラメータ数</div>
-        </div>
+      <div class="stat-grid rv">
+        <div class="stat g"><b>消防庁長官賞</b><span>レスキューロボット<br>コンテスト / チームリーダー</span></div>
+        <div class="stat b"><b>全国大会出場</b><span>NHK ロボコン 2024<br>チーム史上初</span></div>
+        <div class="stat"><b>全国ベスト 8</b><span>キャチロボコンテスト<br>Unity × ROS 環境を自作</span></div>
+        <div class="stat c"><b>sim-to-real</b><span>Unitree Go2 の強化学習を<br>実機制御まで展開</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== 大会実績 ===== -->
-<section id="achievements">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">Achievements</div>
+<!-- ===================== achievements ===================== -->
+<section class="sec" id="achievements">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">02 / Achievements</div>
       <h2>大会実績</h2>
-      <p class="section-desc">ロボコンを中心とした大会での実績。ソフトウェア上位層の設計からチームリーダーまで。</p>
+      <p>ロボコンを中心とした大会実績です。チームマネジメントからソフトウェア設計・実装まで担当しました。</p>
     </div>
 
-    <div class="achv">
+    <div class="achv-list">
 
       <!-- レスコン -->
-      <div class="achv-card award fade-up">
-        <div class="achv-head">
-          <h3>レスキューロボットコンテスト 2024</h3>
-          <span class="badge gold">🏆 消防庁長官賞 受賞</span>
+      <article class="achv hl rv">
+        <div class="achv-top">
+          <h3>レスキューロボットコンテスト</h3>
+          <span class="badge gold">消防庁長官賞 受賞 / ファイナルステージ出場</span>
+          <span class="yr">TEAM LEADER</span>
         </div>
-        <div class="achv-role">役割：チームリーダー ／ ロボット制御・通信システム開発</div>
-        <p>
-          3機体のロボット制御と独自通信システムを自作。後輩が迅速に開発へ参加できるよう、
-          企画段階からチーム体制を整備しながら開発を主導しました。
-        </p>
-        <ul>
-          <li>探索専用ロボットの投入により救助プロセスを迅速化</li>
-          <li>被救助者への負担を最小化する新機構が評価され受賞</li>
-          <li>3機体を統合制御する通信システムをゼロから設計・実装</li>
-        </ul>
-        <!-- YouTube URL が決まったら下のコメントを外して YOUR_VIDEO_ID を差し替え -->
-        <!--
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen loading="lazy"></iframe>
+        <div class="achv-body">
+          <div>
+            <div class="role">役割：チームリーダー ／ 3 機体の制御・通信システム開発</div>
+            <p>
+              3 回生 4 名・2 回生 5 名の少人数プロジェクトでリーダーを務め、3 機体すべてのロボット制御と
+              通信システムの開発を担当。神戸「人と防災未来センター」での実地調査をもとに企画を練り直し、
+              「救助の迅速化」と「被救助者への負担最小化」をコンセプトに再定義して開発を主導しました。
+            </p>
+            <ul class="pts">
+              <li>公式提供基盤（TPIP）に依存しない<strong>独自通信システムを Unity で開発</strong>。大会後も機体を動作可能な状態で保存でき、NHK ロボコンと共通のプラットフォーム化により開発コストを削減</li>
+              <li>ロボット設計を後輩に委任し、自身は<strong>マネジメントと通信基盤開発を並行</strong>。企画・予算策定からチーム体制の再建までを主導</li>
+              <li>被害状況を素早く把握する<strong>探索ロボット</strong>と、被救助者を思いやった<strong>救助機構</strong>が評価され受賞</li>
+              <li>遠隔カメラのリアルタイムストリーミングと操縦 UI を開発</li>
+            </ul>
+            <div class="chips">
+              <span class="chip key">チームマネジメント</span><span class="chip key">Unity</span>
+              <span class="chip">独自通信システム</span><span class="chip">カメラストリーミング</span><span class="chip">3 機体統合制御</span>
+            </div>
+          </div>
+          <div class="achv-media">
+            <div class="vfacade" data-embed="https://drive.google.com/file/d/128b7CCj329Ik0dnmYNnJ5Xx-fV0JBZji/preview" role="button" tabindex="0" aria-label="レスキューロボットの競技動画を再生">
+              <img src="img/rescue-photo.jpg" alt="競技フィールドを走行する自作のクローラー型レスキューロボット" loading="lazy">
+              <div class="play" aria-hidden="true">▶</div>
+              <div class="vlbl">PLAY — 競技動画</div>
+            </div>
+            <p class="cap">自作レスキューロボット（クローラー型・探索カメラ搭載）</p>
+          </div>
         </div>
-        -->
-      </div>
+      </article>
 
-      <!-- NHKロボコン -->
-      <div class="achv-card fade-up">
-        <div class="achv-head">
-          <h3>NHKロボコン 2024</h3>
-          <span class="badge">全国大会出場（自チーム史上初）</span>
+      <!-- NHK -->
+      <article class="achv rv">
+        <div class="achv-top">
+          <h3>NHK ロボコン 2024</h3>
+          <span class="badge blue">全国大会出場（チーム史上初）</span>
+          <span class="yr">MAIN PROGRAMMER</span>
         </div>
-        <div class="achv-role">役割：ソフトウェア上位層担当（Unity）</div>
-        <p>
-          完全自動走行ロボットの開発において、ソフトウェアの上位層一式を Unity で開発。
-          「誰でも扱える」ことを重視したツール設計でチームの開発と運用を支えました。
-        </p>
-        <ul>
-          <li>自動走行ロボットの状態をリアルタイムで把握できる監視GUI</li>
-          <li>移動先・行動手順を誰でも編集できるゲーム感覚の行動計画エディタ</li>
-          <li>目標速度をロボットへ送信する通信アプリケーション</li>
-        </ul>
-      </div>
+        <div class="achv-body">
+          <div>
+            <div class="role">役割：メインプログラマー ／ 自動制御・経路生成</div>
+            <p>
+              完全自動走行ロボットの制御システムを担当。Unity とマイコン間の UDP 通信でレーザーセンサ・
+              ジャイロ・エンコーダの情報を統合し、NavMeshAgent を用いた経路生成でロボットの移動方向と
+              速度をリアルタイムに計算する自動制御を実現しました。
+            </p>
+            <ul class="pts">
+              <li>センサー統合による位置推定と <strong>NavMeshAgent ベースの経路生成・追従制御</strong></li>
+              <li>ロボットの状態をリアルタイムに把握できる<strong>監視 GUI</strong></li>
+              <li>移動先・行動手順をプログラミング不要で編集できる<strong>行動計画エディタ</strong></li>
+              <li>Unity → ESP32 → Jetson を UDP でつなぐ通信アーキテクチャを設計</li>
+            </ul>
+            <div class="chips">
+              <span class="chip key">Unity</span><span class="chip key">経路生成 / NavMesh</span>
+              <span class="chip">UDP 通信</span><span class="chip">センサーフュージョン</span><span class="chip">ESP32 / Jetson</span>
+            </div>
+          </div>
+          <div class="achv-media">
+            <div class="vfacade" data-embed="https://www.youtube.com/embed/b7OApHG8PHA?autoplay=1" role="button" tabindex="0" aria-label="NHKロボコンの動作映像を再生">
+              <img src="img/nhk-photo.jpg" alt="NHK学生ロボコン2024 全国大会の競技フィールド" loading="lazy">
+              <div class="play" aria-hidden="true">▶</div>
+              <div class="vlbl">PLAY — 動作映像</div>
+            </div>
+            <div class="shot diagram">
+              <img src="img/NHK-System.png" alt="システム構成図：UnityからUDPでESP32へ接続し、ESP32からモータ・レーザーセンサ・NVIDIA Jetson・Webカメラに接続" loading="lazy">
+            </div>
+            <p class="cap">全国大会の競技フィールドと、自作した制御システムの構成図</p>
+          </div>
+        </div>
+      </article>
 
       <!-- キャチロボ -->
-      <div class="achv-card fade-up">
-        <div class="achv-head">
+      <article class="achv rv">
+        <div class="achv-top">
           <h3>キャチロボコンテスト</h3>
-          <span class="badge">シミュレーター自作で開発効率を大幅改善</span>
+          <span class="badge cyan">全国ベスト 8</span>
+          <span class="yr">SOFTWARE</span>
         </div>
-        <div class="achv-role">役割：シミュレーター開発</div>
-        <p>
-          ハードウェア完成前から動作検証できるよう、シミュレーターをゼロから自作。
-          ハードウェア開発とソフトウェア開発の並行進行を実現し、開発効率を大幅に改善しました。
-        </p>
-      </div>
+        <div class="achv-body">
+          <div>
+            <div class="role">役割：上位層ソフトウェア担当</div>
+            <p>
+              ロボコン引退後に有志で出場。Unity と ROS を組み合わせてスカラーロボットのシミュレーターを
+              ゼロから自作し、迅速かつ柔軟な開発環境を整備。ハードウェアの完成を待たずにソフトウェアを
+              検証できる体制をつくり、全国ベスト 8 の成績を残しました。
+            </p>
+            <ul class="pts">
+              <li>Unity 上に<strong>スカラーロボットの運動学モデル</strong>を構築</li>
+              <li>ROS 連携により<strong>実機とシミュレーターで同じ制御コードを共有</strong></li>
+              <li>ハード開発と並行してソフト開発を進め、開発期間を大幅に短縮</li>
+            </ul>
+            <div class="chips">
+              <span class="chip key">Unity</span><span class="chip key">ROS</span><span class="chip">C#</span>
+              <span class="chip">スカラーロボット</span><span class="chip">シミュレーター自作</span>
+            </div>
+          </div>
+          <div class="achv-media">
+            <div class="vfacade" data-embed="https://drive.google.com/file/d/1-MXbZ3gsWV6sPBgO7_hKyWY6GHByU7vu/preview" role="button" tabindex="0" aria-label="キャチロボコンテストの競技動画を再生">
+              <div class="wglyph">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V6a2 2 0 0 1 2-2h1"/><path d="M7 4h4l6 6"/><path d="m17 10 3 3-3 3"/><circle cx="6" cy="20" r="2"/></svg>
+                <span>KACHIROBO — COMPETITION</span>
+              </div>
+              <div class="play" aria-hidden="true">▶</div>
+              <div class="vlbl">PLAY — 競技動画</div>
+            </div>
+            <figure class="fig">
+              <svg viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UnityとROSを連携したスカラーロボットシミュレーターの構成図">
+                <defs>
+                  <marker id="ar1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 Z" fill="#98A2B6"/>
+                  </marker>
+                </defs>
+                <rect x="18" y="24" width="120" height="52" rx="10" fill="rgba(46,230,197,.08)" stroke="#2EE6C5" stroke-width="1.6"/>
+                <text x="78" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#2EE6C5" font-family="monospace">Unity</text>
+                <text x="78" y="64" text-anchor="middle" font-size="11" fill="#C4CBD9" font-family="sans-serif">シミュレーター / 可視化</text>
+                <rect x="202" y="24" width="120" height="52" rx="10" fill="rgba(108,140,255,.08)" stroke="#6C8CFF" stroke-width="1.6"/>
+                <text x="262" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="#6C8CFF" font-family="monospace">ROS</text>
+                <text x="262" y="64" text-anchor="middle" font-size="11" fill="#C4CBD9" font-family="sans-serif">制御ロジック</text>
+                <line x1="140" y1="42" x2="200" y2="42" stroke="#98A2B6" stroke-width="1.6" marker-end="url(#ar1)"/>
+                <line x1="200" y1="58" x2="140" y2="58" stroke="#98A2B6" stroke-width="1.6" marker-end="url(#ar1)"/>
+                <rect x="110" y="118" width="120" height="52" rx="10" fill="rgba(240,193,75,.08)" stroke="#F0C24B" stroke-width="1.6"/>
+                <text x="170" y="140" text-anchor="middle" font-size="12.5" font-weight="700" fill="#F0C24B" font-family="sans-serif">スカラーロボット</text>
+                <text x="170" y="158" text-anchor="middle" font-size="11" fill="#C4CBD9" font-family="sans-serif">実機 / 運動学モデル</text>
+                <line x1="240" y1="80" x2="200" y2="116" stroke="#98A2B6" stroke-width="1.6" marker-end="url(#ar1)"/>
+                <line x1="100" y1="80" x2="140" y2="116" stroke="#98A2B6" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar1)"/>
+              </svg>
+              <figcaption>実機とシミュレーターで制御コードを共有する構成</figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
 
     </div>
   </div>
 </section>
 
-<!-- ===== 研究 ===== -->
-<section id="research" class="section-white">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">Research</div>
+<!-- ===================== research ===================== -->
+<section class="sec alt" id="research">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">03 / Research</div>
       <h2>研究</h2>
-      <p class="section-desc">ロボットモーション生成と sim-to-real。シミュレーションの方策を実機で動かすところまで。</p>
+      <p>モーション生成とフィジカル AI。生成モデルの研究から、実機ロボットでの検証まで取り組んでいます。</p>
+      <div style="margin-top:24px">
+        <a class="btn btn-fill" href="research/index.html">研究の詳細を見る<span aria-hidden="true">→</span></a>
+      </div>
     </div>
 
     <div class="r-list">
 
-      <div class="r-item fade-up">
-        <div class="r-icon violet">🧬</div>
-        <div class="r-body">
-          <div class="cat">現在の研究</div>
-          <h3>拡散モデルによるロボットモーション生成</h3>
-          <p>
-            Transformer を用いたロボットのモーション生成を研究。拡散モデルをコアに据えた
-            モーション生成フレームワークを構築し、ロボットが意図を非言語的に伝える
-            動作表現の実現を目指しています。学会発表を準備中。
-          </p>
-        </div>
-      </div>
-
-      <div class="r-item fade-up">
-        <div class="r-icon blue">🤖</div>
-        <div class="r-body">
-          <div class="cat">Sim-to-Real</div>
-          <h3>Unitree Go2 の強化学習と実機展開</h3>
-          <p>
-            Isaac Sim・Genesis を用いた強化学習環境で Unitree Go2 の方策を学習し、
-            sim-to-real による各関節モーター制御の実機接続・実装まで完遂。
-            ドメインランダマイゼーションの設計とリワード関数のチューニングが
-            sim-to-real の成否を左右することを実践から習得しました。
-            オリジナル設計の倒立振子ロボットでの強化学習も実施。
-          </p>
-        </div>
-      </div>
-
-      <div class="r-item fade-up">
-        <div class="r-icon green">🏥</div>
-        <div class="r-body">
-          <div class="cat">学部研究</div>
-          <h3>脳卒中患者向け上肢訓練機器のシステム改修</h3>
-          <p>
-            学部時代はリハビリテーション機器の研究に従事。訓練効果の向上と
-            機器の機械的評価を可能にするソフトウェアシステムを開発しました。
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== 制作物 ===== -->
-<section id="works">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">Works</div>
-      <h2>制作物</h2>
-      <p class="section-desc">個人開発・論文再現実装など。AIとインタラクション、モーション技術の実験場。</p>
-    </div>
-
-    <div class="work-grid">
-
-      <!-- Emotion Avatar (featured) -->
-      <div class="work-card wide fade-up">
-        <div class="wide-inner">
+      <a class="rcard main rv" href="research/motion-style.html">
+        <div class="r-inner stack">
           <div>
-            <div class="work-card-icon">💬</div>
-            <h3>Emotion Avatar</h3>
-            <div class="work-cat">キャラクターAI ／ Unity + Python</div>
+            <div class="rflag now"><span class="dot"></span>CURRENT — 大学院研究</div>
+            <h3>キャラクターの一貫性と感情を分離したモーションスタイル生成</h3>
             <p>
-              「関係性を築けるキャラクター」を目指した感情アバターアプリ。Russell感情円環と
-              Ekman 6基本感情・信頼・親密度を統合した感情モデルを設計し、Unity と
-              Python（FastAPI + PyTorch）を WebSocket でリアルタイム接続。
-              GRU による時系列記憶と VAE による動作の個体差表現まで設計しています。
+              「そのキャラクターらしさ」と「感情表現」を独立した潜在軸として分離し、任意の組み合わせで
+              モーションを生成する研究です。Transformer と拡散モデルをコアに据えた生成フレームワークを
+              スクラッチで構築し、ロボットやキャラクターが意図を非言語的に伝える動作表現の実現を目指しています。
+              学会発表を準備中です。
             </p>
-            <div class="tag-list">
-              <span class="tag">Unity</span>
-              <span class="tag">C#</span>
-              <span class="tag">Python</span>
-              <span class="tag">FastAPI</span>
-              <span class="tag">PyTorch</span>
-              <span class="tag">WebSocket</span>
-              <span class="tag">GRU</span>
-              <span class="tag">VAE</span>
+            <div class="chips">
+              <span class="chip key">PyTorch</span><span class="chip key">拡散モデル</span><span class="chip key">Transformer</span>
+              <span class="chip">潜在空間の分離</span><span class="chip">モーションデータ前処理</span><span class="chip">three.js 可視化</span>
             </div>
+            <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
           </div>
-          <!-- デモ動画プレースホルダー — YouTube URL が決まったら iframe に差し替え -->
-          <div>
-            <div class="video-wrap" style="margin-top:0">
-              <div class="video-placeholder">
-                <div class="play-icon">▶</div>
-                <div>デモ動画（準備中）</div>
-              </div>
-              <!-- <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen loading="lazy"></iframe> -->
-            </div>
-          </div>
+          <figure class="fig wide">
+            <img src="assets/img/style-grid.svg" width="950" height="484" loading="lazy"
+                 alt="単調な歩行モーションを、キャラクターの軸と感情の軸の組み合わせで9通りのスタイルに変換した図">
+            <figcaption>同じ「歩く」動作に、<strong>キャラクター性</strong>と<strong>感情</strong>を別々に付与して生成する</figcaption>
+          </figure>
         </div>
-      </div>
+      </a>
 
-      <!-- ROBOcustom -->
-      <div class="work-card fade-up">
-        <div class="work-card-icon">⚔️</div>
-        <h3>ROBOcustom</h3>
-        <div class="work-cat">ゲーム開発 ／ Unity + C#</div>
+      <a class="rcard rv" href="research/physical-ai.html">
+        <div class="rflag">PHYSICAL AI</div>
+        <h3>Unitree Go2 を用いたフィジカル AI（強化学習 × sim-to-real）</h3>
         <p>
-          ロボットカスタマイズ × ビジュアルプログラミングのバトルゲーム。
-          自作ノードエディタでロボットの行動ロジックを組み、AI同士のバトルで撃破数を競います。
-          ゲームAI・物理判定・アイテムシステムを実装。
+          Genesis・Isaac Sim 上の強化学習で四足ロボット Unitree Go2 の歩行方策を学習し、実機の関節モーター
+          制御への展開（sim-to-real）まで実施。ドメインランダマイゼーションの設計と報酬関数のチューニングが
+          sim-to-real の成否を左右することを、実機テストを通じて体で覚えました。オリジナル設計の
+          倒立振子ロボットでの強化学習も行っています。
         </p>
-        <div class="tag-list">
-          <span class="tag">Unity</span>
-          <span class="tag">C#</span>
-          <span class="tag">Node Editor</span>
-          <span class="tag">Game AI</span>
+        <div class="chips">
+          <span class="chip key">強化学習</span><span class="chip key">sim-to-real</span>
+          <span class="chip">Isaac Sim</span><span class="chip">Genesis</span><span class="chip">ドメインランダマイゼーション</span>
         </div>
-      </div>
+        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+      </a>
 
-      <!-- HuMoT -->
-      <div class="work-card fade-up">
-        <div class="work-card-icon">🔬</div>
-        <h3>HuMoT 再現実装</h3>
-        <div class="work-cat">論文再現 ／ PyTorch</div>
+      <a class="rcard rv" href="research/rehab.html">
+        <div class="rflag">学部研究</div>
+        <h3>リハビリテーション機器のシステム改修と訓練支援ゲームの開発</h3>
         <p>
-          トポロジー非依存のモーションリターゲティング Transformer（arXiv:2305.18897）を、
-          公式コード非公開の中 PyTorch でフルスクラッチ再現。XCiT ブロックから学習ループ・
-          テスト一式まで約216万パラメータのモデルを実装しました。
+          脳卒中患者向け上肢訓練機器のシステム改修を担当し、訓練効果の向上と機器の機械的評価を可能にする
+          ソフトウェアを開発。あわせてリハビリへのモチベーションを高める訓練支援ゲームを制作し、
+          「継続したくなる訓練体験」の設計に取り組みました。
         </p>
-        <div class="tag-list">
-          <span class="tag">PyTorch</span>
-          <span class="tag">Transformer</span>
-          <span class="tag">XCiT</span>
-          <span class="tag">Motion Retargeting</span>
+        <div class="chips">
+          <span class="chip">医療機器ソフト改修</span><span class="chip">Unity</span><span class="chip">評価システム設計</span>
         </div>
-      </div>
-
-      <!-- MoST -->
-      <div class="work-card fade-up">
-        <div class="work-card-icon">🎨</div>
-        <h3>MoST（CVPR 2024）Windows 移植</h3>
-        <div class="work-cat">学習環境構築 ／ PyTorch + CUDA</div>
-        <p>
-          モーションスタイル変換モデル MoST を Linux 前提の公式環境から
-          Windows + RTX 4060 Ti へ移植。CUDA 非互換の解決、コードパッチ、
-          データ前処理から GPU 学習の検証まで完了しました。
-        </p>
-        <div class="tag-list">
-          <span class="tag">PyTorch</span>
-          <span class="tag">CUDA</span>
-          <span class="tag">Windows</span>
-          <span class="tag">Motion Style</span>
-        </div>
-      </div>
-
-      <!-- TripoSplat -->
-      <div class="work-card fade-up">
-        <div class="work-card-icon">✨</div>
-        <h3>TripoSplat ローカル運用</h3>
-        <div class="work-cat">3D生成 ／ 3D Gaussian Splatting</div>
-        <p>
-          1枚の画像から 3D Gaussian Splat（最大26万個）を生成するモデルを
-          ローカル GPU にセットアップし、画像 → 3D 生成パイプラインを構築・運用しています。
-        </p>
-        <div class="tag-list">
-          <span class="tag">3DGS</span>
-          <span class="tag">PyTorch</span>
-          <span class="tag">CUDA</span>
-          <span class="tag">RTX 4060 Ti</span>
-        </div>
-      </div>
-
-      <!-- SONIC on Isaac Lab -->
-      <div class="work-card fade-up">
-        <div class="work-card-icon">🦾</div>
-        <h3>SONIC on Isaac Lab（Windows 移植）</h3>
-        <div class="work-cat">強化学習 ／ Isaac Lab 2.3.2</div>
-        <p>
-          GEAR-SONIC を Windows ネイティブ Isaac Lab 2.3.2 で動作検証。
-          Linux 前提の依存ライブラリ・パスの問題を Windows 向けにパッチし、
-          シミュレーション環境を安定稼働させました。
-        </p>
-        <div class="tag-list">
-          <span class="tag">Isaac Lab</span>
-          <span class="tag">Python</span>
-          <span class="tag">Windows</span>
-          <span class="tag">強化学習</span>
-        </div>
-      </div>
+        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+      </a>
 
     </div>
   </div>
 </section>
 
-<!-- ===== Skills ===== -->
-<section id="skills" class="section-white">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">Skills</div>
-      <h2>スキル</h2>
-      <p class="section-desc">研究・大会・個人開発で実際に使ってきた技術です。</p>
+<!-- ===================== works ===================== -->
+<section class="sec" id="works">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">04 / Works</div>
+      <h2>制作物</h2>
+      <p>個人開発・論文再現実装・開発ツールなど。各カードから詳細ページで、設計と実装の中身を説明しています。</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="制作物カテゴリ">
+      <button class="tab on" data-filter="all"  role="tab" aria-selected="true">ALL</button>
+      <button class="tab"    data-filter="ai"   role="tab" aria-selected="false">AI / 研究</button>
+      <button class="tab"    data-filter="game" role="tab" aria-selected="false">ゲーム</button>
+      <button class="tab"    data-filter="tool" role="tab" aria-selected="false">開発ツール</button>
+      <button class="tab"    data-filter="3d"   role="tab" aria-selected="false">3D</button>
+    </div>
+
+    <div class="wgrid">
+
+      <a class="wcard big rv" data-cat="game" href="works/slime-adventure.html">
+        <div class="wvis">
+          <span class="kind game">GAME</span>
+          <img src="img/slime-action1.jpg" alt="SlimeAdventure のゲーム画面" width="832" height="495" loading="lazy">
+        </div>
+        <div class="wbody">
+          <h3>SlimeAdventure</h3>
+          <div class="wmeta">Unity + Blender / スマホ向け 3D アクション / 約 1.5 ヶ月</div>
+          <p>
+            スライムと勇者が力を合わせて敵を倒しながら進むリアルタイムアクション。QTE を織り込んだ戦闘、
+            アイテム回収で仲間が増える「スライム仲間システム」、集めた仲間と挑むボス戦を実装。
+            キャラクターとフィールドの 3D モデルはすべて Blender で自作しました。
+          </p>
+          <div class="chips">
+            <span class="chip key">Unity</span><span class="chip key">C#</span><span class="chip key">Blender</span>
+            <span class="chip">QTE</span><span class="chip">キャラクター AI</span><span class="chip">スマホ対応</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="ai" href="works/avatarchat.html">
+        <div class="wvis">
+          <span class="kind ai">AI</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg>
+            <span>REALTIME AVATAR</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>AvatarChat</h3>
+          <div class="wmeta">LLM + モーション生成 + TTS / フルオフライン動作</div>
+          <p>
+            会話に応じてアバターが動き・声で応答する対話システム。LLM・モーション生成・音声合成を
+            1 本のパイプラインにまとめ、クラウド API を使わないフルオフライン構成でも動作します。
+          </p>
+          <div class="chips">
+            <span class="chip key">LLM</span><span class="chip key">three.js</span><span class="chip">TTS</span><span class="chip">FastAPI</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="ai" href="works/emotion-avatar.html">
+        <div class="wvis">
+          <span class="kind ai">AI</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4 4 0 0 0 7 0"/><path d="M9 9h.01M15 9h.01"/></svg>
+            <span>EMOTION MODEL</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>Emotion Avatar</h3>
+          <div class="wmeta">Unity + Python / 感情をもつキャラクター AI</div>
+          <p>
+            「関係性を築けるキャラクター」を目指した感情アバター。Russell 感情円環と Ekman 6 基本感情・
+            信頼・親密度を統合した感情モデルを設計し、Unity と Python を WebSocket でリアルタイム接続しました。
+          </p>
+          <div class="chips">
+            <span class="chip key">Unity</span><span class="chip key">PyTorch</span><span class="chip">WebSocket</span><span class="chip">GRU / VAE</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="ai" href="works/humot.html">
+        <div class="wvis">
+          <span class="kind ai">PAPER</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h9l3 3v13H4z"/><path d="M13 4v4h4"/><path d="M7 12h7M7 16h5"/></svg>
+            <span>REPRODUCTION</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>HuMoT 再現実装</h3>
+          <div class="wmeta">PyTorch / モーションリターゲティング</div>
+          <p>
+            トポロジー非依存のモーションリターゲティング Transformer（arXiv:2305.18897）を、公式コード
+            非公開の中フルスクラッチで再現。XCiT ブロックから学習ループまで約 216 万パラメータを実装しました。
+          </p>
+          <div class="chips">
+            <span class="chip key">PyTorch</span><span class="chip key">Transformer</span><span class="chip">XCiT</span><span class="chip">論文再現</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="ai" href="works/most.html">
+        <div class="wvis">
+          <span class="kind ai">AI</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
+            <span>STYLE TRANSFER</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>MoST（CVPR 2024）Windows 移植</h3>
+          <div class="wmeta">PyTorch + CUDA / モーションスタイル変換</div>
+          <p>
+            モーションスタイル変換モデル MoST を Linux 前提の公式環境から Windows + GPU 環境へ移植。
+            CUDA 非互換の解決、コードパッチ、データ前処理から GPU 学習の検証まで完了しています。
+          </p>
+          <div class="chips">
+            <span class="chip key">PyTorch</span><span class="chip key">CUDA</span><span class="chip">Windows 移植</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="ai" href="works/sonic-isaaclab.html">
+        <div class="wvis">
+          <span class="kind ai">ROBOTICS</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.5"/><path d="M12 7.5v5M12 12.5 7 21M12 12.5 17 21M6.5 9.5 12 11l5.5-1.5"/></svg>
+            <span>HUMANOID RL</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>SONIC on Isaac Lab（Windows 移植）</h3>
+          <div class="wmeta">Isaac Lab / ヒューマノイド全身制御</div>
+          <p>
+            NVIDIA GEAR-SONIC（ヒューマノイド全身制御モデル）を Windows ネイティブの Isaac Lab で動作検証。
+            Linux 前提の依存関係をパッチし、シミュレーション環境を安定稼働させました。
+          </p>
+          <div class="chips">
+            <span class="chip key">Isaac Lab</span><span class="chip key">強化学習</span><span class="chip">Windows 移植</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="game" href="works/robocustom.html">
+        <div class="wvis">
+          <span class="kind game">GAME</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h.01M16 16h.01"/></svg>
+            <span>ROBOT BATTLE</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>ROBOCustom</h3>
+          <div class="wmeta">Unity + C# / ロボットバトル × ビジュアルプログラミング</div>
+          <p>
+            自作ノードエディタでロボットの行動ロジックを組み、AI 同士のバトルで撃破数を競うゲーム。
+            ゲーム AI・物理判定・武器やパーツのアイテムシステムを実装しています。
+          </p>
+          <div class="chips">
+            <span class="chip key">Unity</span><span class="chip key">C#</span><span class="chip">ノードエディタ</span><span class="chip">Game AI</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="tool" href="works/blender-autorig.html">
+        <div class="wvis">
+          <span class="kind tool">TOOL</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 7.5 16 16.5M6 8.5V15a3 3 0 0 0 3 3h2"/></svg>
+            <span>AUTO RIGGING</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>自動リギングアドオン（Blender）</h3>
+          <div class="wmeta">Blender Python / リグ・揺れボーンの自動生成</div>
+          <p>
+            マーカーを置くだけで人型スケルトンを生成し、スカートや髪の揺れボーンまで自動セットアップする
+            アドオン。手作業だったリグ工程を短縮し、歩行アニメーションで実際に検証しました。
+          </p>
+          <div class="chips">
+            <span class="chip key">Python</span><span class="chip key">Blender API</span><span class="chip">リギング</span><span class="chip">物理シミュレーション</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="3d" href="works/blender-modeling.html">
+        <div class="wvis">
+          <span class="kind d3">3D</span>
+          <img src="img/GameChange1.png" alt="Blenderで自作したスライムと勇者の3Dキャラクターモデル" loading="lazy">
+        </div>
+        <div class="wbody">
+          <h3>Blender キャラクターモデリング</h3>
+          <div class="wmeta">Blender / キャラクター・プロップ制作</div>
+          <p>
+            ゲームに登場するキャラクター・小物・フィールドを Blender でモデリング。モデリングから
+            テクスチャ・リグ・Unity への組み込みまで一貫して制作しています。
+          </p>
+          <div class="chips">
+            <span class="chip key">Blender</span><span class="chip">モデリング</span><span class="chip">リギング</span><span class="chip">Unity 連携</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+      <a class="wcard rv" data-cat="3d" href="works/triposplat.html">
+        <div class="wvis">
+          <span class="kind d3">3D</span>
+          <div class="wglyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>
+            <span>IMAGE → 3D</span>
+          </div>
+        </div>
+        <div class="wbody">
+          <h3>画像 → 3D 生成のローカル運用</h3>
+          <div class="wmeta">3D Gaussian Splatting / ローカル GPU</div>
+          <p>
+            1 枚の画像から 3D Gaussian Splat を生成するモデル（TripoSplat / TRELLIS.2）をローカル GPU に
+            セットアップし、画像 → 3D 生成パイプラインを構築・運用しています。
+          </p>
+          <div class="chips">
+            <span class="chip key">3DGS</span><span class="chip key">PyTorch</span><span class="chip">CUDA</span>
+          </div>
+          <div class="wmore">VIEW DETAIL <span aria-hidden="true">→</span></div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== skills ===================== -->
+<section class="sec alt" id="skills">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">05 / Skills</div>
+      <h2>スキルセット</h2>
+      <p>研究・大会・個人開発で実際に使ってきた技術です。強調表示は中核として日常的に使っているものです。</p>
     </div>
 
     <div class="skill-grid">
-
-      <div class="skill-card fade-up">
-        <div class="skill-card-head">
-          <div class="skill-card-ico">🧠</div>
+      <div class="skill rv">
+        <div class="skill-top">
+          <div class="skill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#2EE6C5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4.5 4.5 0 0 0-4.5 4.5c0 .84.23 1.62.63 2.29A5.5 5.5 0 0 0 4 14a5.5 5.5 0 0 0 5.5 5.5c.4 0 .8-.04 1.17-.13A3.5 3.5 0 0 0 12 22a3.5 3.5 0 0 0 1.33-2.63c.37.09.77.13 1.17.13A5.5 5.5 0 0 0 20 14a5.5 5.5 0 0 0-4.13-5.21c.4-.67.63-1.45.63-2.29A4.5 4.5 0 0 0 12 2z"/></svg></div>
           <h3>AI / 機械学習</h3>
         </div>
-        <p>Transformer・GAN・拡散モデルによるモーション生成モデルの実装と学習パイプライン構築。研究室で日常的に使用。</p>
-        <div class="skill-tags">
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">PyTorch</span>
-          <span class="skill-tag">Transformer</span>
-          <span class="skill-tag">Diffusion Models</span>
-          <span class="skill-tag">VAE / GRU</span>
-          <span class="skill-tag">CUDA</span>
+        <p class="skill-ctx"><strong>研究で日常使用。</strong>モーション生成モデルの実装、学習パイプライン構築、論文再現。</p>
+        <div class="chips">
+          <span class="chip key">Python</span><span class="chip key">PyTorch</span><span class="chip key">Transformer</span><span class="chip key">拡散モデル</span>
+          <span class="chip">VAE / GRU</span><span class="chip">GAN</span><span class="chip">CUDA</span>
         </div>
       </div>
 
-      <div class="skill-card fade-up">
-        <div class="skill-card-head">
-          <div class="skill-card-ico">🤖</div>
-          <h3>ロボット / シミュレーション</h3>
+      <div class="skill rv">
+        <div class="skill-top">
+          <div class="skill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#6C8CFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h.01M16 16h.01"/></svg></div>
+          <h3>ロボティクス / シミュレーション</h3>
         </div>
-        <p>Unitree Go2・倒立振子ロボットの強化学習 → sim-to-real 完遂。ROS2 によるロボット開発の実務経験あり。</p>
-        <div class="skill-tags">
-          <span class="skill-tag">ROS2</span>
-          <span class="skill-tag">Isaac Sim</span>
-          <span class="skill-tag">Genesis</span>
-          <span class="skill-tag">強化学習</span>
-          <span class="skill-tag">sim-to-real</span>
-          <span class="skill-tag">Arduino / C++</span>
+        <p class="skill-ctx"><strong>ロボコン 3 大会と研究で使用。</strong>強化学習の環境構築から実機制御・sim-to-real まで。</p>
+        <div class="chips">
+          <span class="chip key">ROS / ROS 2</span><span class="chip key">強化学習</span><span class="chip key">sim-to-real</span>
+          <span class="chip">Isaac Sim / Isaac Lab</span><span class="chip">Genesis</span><span class="chip">ESP32 / マイコン</span><span class="chip">UDP 通信</span>
         </div>
       </div>
 
-      <div class="skill-card fade-up">
-        <div class="skill-card-head">
-          <div class="skill-card-ico">🎮</div>
-          <h3>ゲーム / GUI 開発</h3>
+      <div class="skill rv">
+        <div class="skill-top">
+          <div class="skill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#F0C24B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/></svg></div>
+          <h3>ゲーム / アプリケーション開発</h3>
         </div>
-        <p>NHKロボコンの自動走行 GUI・行動計画エディタ・通信アプリ、キャチロボのシミュレーター、個人ゲーム開発。</p>
-        <div class="skill-tags">
-          <span class="skill-tag">Unity</span>
-          <span class="skill-tag">C#</span>
-          <span class="skill-tag">WebSocket</span>
-          <span class="skill-tag">FastAPI</span>
+        <p class="skill-ctx"><strong>大会ツールと個人開発で使用。</strong>ロボット監視 GUI・行動計画エディタからゲーム制作まで。</p>
+        <div class="chips">
+          <span class="chip key">Unity</span><span class="chip key">C#</span><span class="chip key">Blender</span>
+          <span class="chip">FastAPI</span><span class="chip">WebSocket</span><span class="chip">three.js</span>
         </div>
       </div>
 
-      <div class="skill-card fade-up">
-        <div class="skill-card-head">
-          <div class="skill-card-ico">⚙️</div>
-          <h3>環境構築 / インフラ</h3>
+      <div class="skill rv">
+        <div class="skill-top">
+          <div class="skill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#B08CFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"/></svg></div>
+          <h3>開発環境 / その他</h3>
         </div>
-        <p>研究モデルの Windows GPU 環境への移植、CUDA 依存関係の解決、生成モデルのローカル運用。</p>
-        <div class="skill-tags">
-          <span class="skill-tag">CUDA 環境構築</span>
-          <span class="skill-tag">Windows 移植</span>
-          <span class="skill-tag">Git</span>
-          <span class="skill-tag">C++</span>
+        <p class="skill-ctx"><strong>研究環境の構築・運用。</strong>Linux 前提の研究モデルを Windows GPU 環境へ移植した実績多数。</p>
+        <div class="chips">
+          <span class="chip key">CUDA 環境構築</span><span class="chip key">Git</span>
+          <span class="chip">C++</span><span class="chip">Arduino</span><span class="chip">Windows 移植</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ===== Contact ===== -->
-<section id="contact">
-  <div class="container">
-    <div class="section-head">
-      <div class="section-label">Contact</div>
+<!-- ===================== contact ===================== -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">06 / Contact</div>
       <h2>連絡先</h2>
-      <p class="section-desc">研究・プロジェクト・共同開発など、お気軽にご連絡ください。</p>
+      <p>研究・開発・採用に関するご連絡は、お気軽にどうぞ。</p>
     </div>
     <div class="contact-row">
-      <a class="contact-card" href="mailto:koufuku293@gmail.com">
-        <div class="cc-ico">✉️</div>
-        <div class="cc-lbl">Email</div>
-        <div class="cc-val">koufuku293@gmail.com</div>
+      <a class="ccard rv" href="mailto:koufuku293@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <div class="lbl">EMAIL</div>
+        <div class="val">koufuku293@gmail.com</div>
       </a>
-      <a class="contact-card" href="https://github.com/funitec" target="_blank" rel="noopener">
-        <div class="cc-ico">🐙</div>
-        <div class="cc-lbl">GitHub</div>
-        <div class="cc-val">github.com/funitec</div>
+      <a class="ccard rv" href="https://github.com/funitec" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        <div class="lbl">GITHUB</div>
+        <div class="val">github.com/funitec</div>
       </a>
-      <a class="contact-card" href="https://x.com/wHgWIQWQhkSpXA4" target="_blank" rel="noopener">
-        <div class="cc-ico">𝕏</div>
-        <div class="cc-lbl">X (Twitter)</div>
-        <div class="cc-val">@wHgWIQWQhkSpXA4</div>
+      <a class="ccard rv" href="https://x.com/wHgWIQWQhkSpXA4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.2h3.7l-8.1 9.3L24 22.8h-7.5l-5.9-7.7-6.7 7.7H.2l8.7-9.9L0 1.2h7.7l5.3 7 6-7zm-1.3 19.4h2L6.6 3.3H4.4l13.2 17.3z"/></svg>
+        <div class="lbl">X (TWITTER)</div>
+        <div class="val">@wHgWIQWQhkSpXA4</div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ===== Footer ===== -->
+</main>
+
 <footer>
-  <div class="container">
-    <p>© 2026 funitec — Robotics × AI Engineer &nbsp;·&nbsp; <a href="mailto:koufuku293@gmail.com">koufuku293@gmail.com</a></p>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="mailto:koufuku293@gmail.com">koufuku293@gmail.com</a> / <a href="https://github.com/funitec" target="_blank" rel="noopener">github.com/funitec</a></span>
   </div>
 </footer>
 
-<script>
-  // Nav: shadow on scroll
-  const nav = document.getElementById('main-nav');
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  // Nav: mobile toggle
-  const toggle = document.getElementById('nav-toggle');
-  const links  = document.getElementById('nav-links');
-  toggle.addEventListener('click', () => links.classList.toggle('open'));
-  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-
-  // Scroll-in animation
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
-  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
-</script>
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/skeleton.js" defer></script>
 </body>
 </html>

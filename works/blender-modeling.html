@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blender キャラクターモデリング | 福田晃己 Portfolio</title>
+<meta name="description" content="ゲームに登場するキャラクター・小物・フィールドをBlenderで制作。モデリングからテクスチャ・リグ・Unity組み込みまで一貫して担当。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">3D / Blender</div>
+    <h1>Blender キャラクターモデリング</h1>
+    <p class="sub">
+      自作ゲームに登場するキャラクター・小物・フィールドを Blender で制作しています。
+      モデリングからテクスチャ、リグ、そして <strong>Unity へ組み込んで動かすところまで一貫して担当</strong>し、
+      「実装しやすい 3D モデル」を意識した作り方を身につけました。
+    </p>
+    <div class="chips">
+      <span class="chip key">Blender</span><span class="chip">モデリング</span>
+      <span class="chip">テクスチャ</span><span class="chip">リギング</span><span class="chip">Unity 連携</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人制作（モデリング〜組み込み）</dd></div>
+      <div><dt>STACK</dt><dd>Blender, Unity</dd></div>
+      <div><dt>SUBJECT</dt><dd>キャラクター / プロップ / フィールド</dd></div>
+      <div><dt>USE</dt><dd>自作ゲームのアセットとして使用</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <div class="shot" style="margin-bottom:32px">
+        <img src="../img/GameChange1.png" alt="Blender で自作したスライムと勇者の3Dキャラクターモデル" loading="lazy">
+      </div>
+
+      <section class="block">
+        <h2 data-n="01">制作しているもの</h2>
+        <p>
+          <a href="slime-adventure.html" style="color:var(--acc)">SlimeAdventure</a> に登場するスライムや勇者、
+          アイテム、フィールドのオブジェクトなど、ゲームに必要な 3D アセットを制作しています。
+          既存素材を探して組み合わせるのではなく自分で作ることで、
+          <strong>ゲームの仕様に合わせて形状やボーン構成を決められる</strong>のが利点でした。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">制作フロー</h2>
+        <ul class="pts">
+          <li><strong>モデリング</strong>：ゲーム内での見え方（カメラ距離・画面サイズ）を先に決め、必要な情報量に合わせてポリゴン数を決める</li>
+          <li><strong>テクスチャ</strong>：ディテールは形状よりテクスチャで持たせ、モバイルでも軽く動く構成にする</li>
+          <li><strong>リギング / スキニング</strong>：アニメーションで曲げたい箇所を基準にボーンを配置し、ウェイトを調整</li>
+          <li><strong>Unity への組み込み</strong>：スケール・座標軸・マテリアル設定を Unity 側の前提に合わせて書き出し、実機で確認</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">実装者としてモデルを作る</h2>
+        <p>
+          プログラム側も自分で書くため、<strong>「実装しにくいモデル」がどういうものかを身をもって知っている</strong>のが
+          強みだと感じています。たとえば、揺らしたい部分にボーンを入れ忘れると後から手戻りが発生し、
+          原点やスケールがずれていると Unity 側で毎回補正コードが必要になります。
+        </p>
+        <p>
+          こうした「作り手と使い手の間で起きる無駄」を減らす意識が、
+          後に <a href="blender-autorig.html" style="color:var(--acc)">リギングを自動化するアドオン</a>を
+          自作する動機になりました。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>モデリングから Unity 組み込みまで一貫</li>
+          <li>モバイル前提の軽量アセット設計</li>
+          <li>実装しやすいボーン構成を意識</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="slime-adventure.html">SlimeAdventure <span aria-hidden="true">→</span></a></li>
+          <li><a href="blender-autorig.html">自動リギングアドオン <span aria-hidden="true">→</span></a></li>
+          <li><a href="triposplat.html">画像 → 3D 生成 <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="blender-autorig.html"><div class="dir">← PREV</div><div class="ttl">自動リギングアドオン（Blender）</div></a>
+      <a class="next" href="triposplat.html"><div class="dir">NEXT →</div><div class="ttl">画像 → 3D 生成のローカル運用</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

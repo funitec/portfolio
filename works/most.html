@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoST（CVPR 2024）Windows 移植 | 福田晃己 Portfolio</title>
+<meta name="description" content="Linux前提で公開されたモーションスタイル変換モデル MoST（CVPR 2024）を Windows + GPU 環境へ移植し、データ前処理からGPU学習の検証まで実施した記録。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">AI / Motion Style Transfer</div>
+    <h1>MoST（CVPR 2024）Windows 移植</h1>
+    <p class="sub">
+      Linux 前提で公開されているモーションスタイル変換モデルを、自分の Windows + GPU 環境で
+      <strong>学習まで通せる状態</strong>にした作業です。依存関係の解決、コードのパッチ、
+      データセットの前処理までを行い、研究のベースラインとして使える環境を整えました。
+    </p>
+    <div class="chips">
+      <span class="chip key">PyTorch</span><span class="chip key">CUDA</span>
+      <span class="chip">Windows 移植</span><span class="chip">データ前処理</span><span class="chip">モーションスタイル変換</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人（環境構築 / 移植 / 学習検証）</dd></div>
+      <div><dt>MODEL</dt><dd>MoST — CVPR 2024 のスタイル変換モデル</dd></div>
+      <div><dt>STACK</dt><dd>PyTorch 2.6 + CUDA 12.4 / Windows</dd></div>
+      <div><dt>DATA</dt><dd>モーションキャプチャデータの前処理済み</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">背景</h2>
+        <p>
+          研究テーマがモーションのスタイル制御であるため、<strong>先行手法を自分の環境で実際に動かして
+          比較できる状態</strong>を持っておくことが必要でした。ただ公開されている研究コードは Linux + 特定の
+          CUDA バージョンを前提に書かれていることが多く、手元の Windows GPU 環境ではそのままでは動きません。
+        </p>
+        <p>
+          研究のたびに環境を借りるのではなく、<strong>自分の手元で回せるようにしておく</strong>ほうが試行回数を
+          増やせると考え、移植作業に取り組みました。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">やったこと</h2>
+        <ul class="pts">
+          <li><strong>依存関係の再構成</strong>：公式指定のライブラリ構成が Windows で解決できないため、PyTorch 2.6 + CUDA 12.4 の組み合わせを起点に依存を組み直した</li>
+          <li><strong>コードのパッチ</strong>：Linux 固有のパス処理・プロセス起動・ファイル権限周りを Windows で動く形に修正</li>
+          <li><strong>データ前処理</strong>：スタイル付きモーションキャプチャデータを学習用の形式へ変換し、関節定義とフレームレートを揃えた</li>
+          <li><strong>GPU 学習の検証</strong>：実際に学習を回して損失が下がることを確認し、環境として使える状態であることを確かめた</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">つまづきどころ</h2>
+        <h3>エラーの原因を切り分ける順番</h3>
+        <p>
+          移植作業では「ライブラリのバージョン不整合」「Linux 依存のコード」「データ形式の不一致」が
+          同時にエラーとして現れます。そのため<strong>まず環境が正しいことを最小のスクリプトで確認し、
+          次にコード、最後にデータ</strong>の順で切り分けるようにしました。
+          この順番を守らないと、直したつもりの箇所が別の原因に隠れて判断できなくなります。
+        </p>
+        <h3>前処理を信用できる状態にする</h3>
+        <p>
+          学習が進まないときにモデル側を疑う前に、データが意図どおり変換されているかを可視化して確認しました。
+          モーションデータは<strong>数値が壊れていても学習は一見進む</strong>ため、
+          目で見て確認できる状態を作ることが結果的に近道でした。
+        </p>
+        <div class="note">
+          <b>この作業で得たもの：</b>Linux 前提の研究コードを Windows GPU 環境に持ち込む手順が自分の中で定型化しました。
+          同じ進め方で <a href="sonic-isaaclab.html" style="color:var(--acc)">Isaac Lab 上のヒューマノイド制御モデル</a>や
+          画像 → 3D 生成モデルの環境も構築しています。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">研究での位置づけ</h2>
+        <p>
+          この環境をベースラインとして、自分の研究では<strong>スタイルを 1 つの軸として扱う既存手法を、
+          キャラクター性と感情の 2 軸に分けて扱う</strong>方向へ拡張しています。
+          先行手法を実際に動かせることで、「何がすでに出来ていて、どこが自分の貢献になるか」を
+          実験結果として示せるようになりました。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>Linux 前提の研究コードを Windows で学習まで到達</li>
+          <li>エラー切り分けの手順を定型化</li>
+          <li>研究のベースライン環境として運用中</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="humot.html">HuMoT 再現実装 <span aria-hidden="true">→</span></a></li>
+          <li><a href="sonic-isaaclab.html">SONIC on Isaac Lab <span aria-hidden="true">→</span></a></li>
+          <li><a href="triposplat.html">画像 → 3D 生成 <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="humot.html"><div class="dir">← PREV</div><div class="ttl">HuMoT 再現実装</div></a>
+      <a class="next" href="sonic-isaaclab.html"><div class="dir">NEXT →</div><div class="ttl">SONIC on Isaac Lab</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

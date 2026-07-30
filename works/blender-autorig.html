@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自動リギングアドオン（Blender）| 福田晃己 Portfolio</title>
+<meta name="description" content="マーカーを置くだけで人型スケルトンと揺れボーンを自動生成するBlenderアドオン。Unity向けの揺れもの自動セットアップツールも制作。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">Tool / Blender Python</div>
+    <h1>自動リギングアドオン（Blender）</h1>
+    <p class="sub">
+      キャラクターモデルにマーカーを置くだけで人型スケルトンを生成し、
+      髪やスカートの<strong>揺れボーンまで自動でセットアップする</strong>アドオン。
+      毎回手作業でやっていたリグ工程を短縮するために自作し、歩行アニメーションで実際に検証しました。
+    </p>
+    <div class="chips">
+      <span class="chip key">Python</span><span class="chip key">Blender API</span>
+      <span class="chip">リギング</span><span class="chip">スキニング</span><span class="chip">物理シミュレーション</span><span class="chip">アドオン開発</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人開発（設計 / 実装 / 検証）</dd></div>
+      <div><dt>STACK</dt><dd>Python, Blender API</dd></div>
+      <div><dt>OUTPUT</dt><dd>人型リグ + 揺れボーンの自動生成</dd></div>
+      <div><dt>VALIDATION</dt><dd>歩行アニメーションで挙動を実測確認</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">作った理由</h2>
+        <p>
+          ゲーム制作では 3D モデルを自分で作っていたため、キャラクターを増やすたびに
+          <strong>同じリギング作業を繰り返す</strong>ことになっていました。
+          特に髪やスカートといった揺れものは、ボーンを一本ずつ並べて物理を設定する必要があり、
+          手数が多いうえに設定ミスも起こりやすい工程です。
+        </p>
+        <p>
+          「毎回やる作業なら自動化したほうが早い」と考え、既存の商用リギングアドオンの操作体系を参考に、
+          <strong>自分のワークフローに合わせた自動化ツール</strong>を作りました。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">機能</h2>
+        <ul class="pts">
+          <li><strong>マーカー方式のスケルトン生成</strong>：モデル上の主要部位（頭・肩・肘・膝など）にマーカーを配置すると、その位置関係から人型ボーン階層を生成する</li>
+          <li><strong>揺れボーンの自動生成</strong>：髪・スカートなどのメッシュを指定すると、形状に沿ってボーンチェーンを自動生成し、揺れの物理設定までまとめて行う</li>
+          <li><strong>揺れものの表示切り替え</strong>：確認したい対象だけを表示できるようにし、揺れボーンが増えても作業しやすくした</li>
+          <li><strong>重なった布の連動</strong>：スカートが複数層に重なっている場合に、内側と外側のボーンを共有して不自然な貫通を避ける処理</li>
+          <li><strong>頭皮部分の固定</strong>：髪の根元は揺らさず固定し、毛先ほど揺れる自然な減衰を設定</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">検証で分かったこと</h2>
+        <p>
+          自動生成した時点で見た目が正しくても、<strong>アニメーションを再生すると初めて分かる不具合</strong>が
+          いくつもありました。そのため生成結果を静止状態で確認するだけでなく、
+          歩行アニメーションを適用して揺れの挙動を測る形で検証しています。
+        </p>
+        <div class="note">
+          <b>実際に見つかった問題：</b>静止しているはずの状態で布が浮き上がる、
+          重なった布同士が貫通する、根元まで揺れて髪が不自然に見える —— いずれも
+          <strong>動かして初めて分かる種類の不具合</strong>でした。合成的なテストが通るだけでは
+          ツールとして使える保証にならない、という教訓になっています。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">関連して作ったツール</h2>
+        <p>
+          同じ課題意識から、Unity 側でも制作ツールを作っています。
+        </p>
+        <ul class="pts">
+          <li><strong>揺れもの自動セットアップツール（Unity）</strong>：インポート済みキャラクターの髪・衣装に対して揺れ物のコンポーネント設定を一括で行うエディタ拡張。実際のアバターモデルで動作を検証済み</li>
+          <li><strong>マテリアル一括トゥーン化ツール（Unity）</strong>：既存マテリアルをトゥーン調のシェーダー構成へまとめて変換し、アウトライン用のメッシュ生成まで自動化</li>
+        </ul>
+        <p>
+          いずれも「自分が繰り返している手作業を、そのままツールにする」という同じ発想から作ったものです。
+          研究でも学習・評価のスクリプトを整えることが多く、<strong>作業を自動化して試行回数を増やす</strong>
+          進め方が身についています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>マーカー配置だけでリグを自動生成</li>
+          <li>揺れボーンの生成と物理設定まで自動化</li>
+          <li>アニメーション再生で挙動を実測検証</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="blender-modeling.html">Blender モデリング <span aria-hidden="true">→</span></a></li>
+          <li><a href="slime-adventure.html">SlimeAdventure <span aria-hidden="true">→</span></a></li>
+          <li><a href="triposplat.html">画像 → 3D 生成 <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="robocustom.html"><div class="dir">← PREV</div><div class="ttl">ROBOCustom</div></a>
+      <a class="next" href="blender-modeling.html"><div class="dir">NEXT →</div><div class="ttl">Blender キャラクターモデリング</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

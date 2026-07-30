@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion Avatar | 福田晃己 Portfolio</title>
+<meta name="description" content="Russell感情円環とEkman6基本感情、信頼・親密度を統合した感情モデルをUnity + Python(PyTorch)で実装した感情アバター Emotion Avatar。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">AI / Unity + Python</div>
+    <h1>Emotion Avatar</h1>
+    <p class="sub">
+      「一緒に過ごすうちに関係性が変わっていくキャラクター」を目指した感情アバター。
+      心理学の感情モデルを実装可能な形に落とし込み、Unity と Python を WebSocket で
+      リアルタイム接続して、感情の推移がそのまま動きに現れる仕組みを作りました。
+    </p>
+    <div class="chips">
+      <span class="chip key">Unity</span><span class="chip key">Python</span><span class="chip key">PyTorch</span>
+      <span class="chip">FastAPI</span><span class="chip">WebSocket</span><span class="chip">GRU / VAE</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人開発（感情モデル設計 / 実装）</dd></div>
+      <div><dt>STACK</dt><dd>Unity (URP), C#, Python, FastAPI, PyTorch</dd></div>
+      <div><dt>MODEL</dt><dd>Russell 円環 + Ekman 6 基本感情 + 関係性指標</dd></div>
+      <div><dt>STATUS</dt><dd>コアループ実装済み / 継続開発中</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">目指したこと</h2>
+        <p>
+          既存のキャラクターアプリを触っていて感じたのは、「反応はするが、関係が積み上がらない」という物足りなさでした。
+          そこで、<strong>その場の感情（短期）と、相手への信頼・親密度（長期）を別の状態として持たせる</strong>ことで、
+          同じ働きかけでも関係性の段階によって反応が変わるアバターを作ろうと考えました。
+        </p>
+        <p>
+          「生物らしさ」「個性の創発」「ある程度の予測不可能性」を設計目標に置き、
+          ロボットの本能・感情モデルに関する先行事例を参照しながら構成を決めています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">感情モデルの設計</h2>
+        <figure class="fig" style="margin-bottom:20px">
+          <svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Russell感情円環：横軸をvalence（快・不快）、縦軸をarousal（覚醒度）とし、4象限に感情を配置した図">
+            <line x1="30" y1="120" x2="310" y2="120" stroke="#2C3444" stroke-width="1.4"/>
+            <line x1="170" y1="15" x2="170" y2="225" stroke="#2C3444" stroke-width="1.4"/>
+            <circle cx="170" cy="120" r="96" fill="none" stroke="#2EE6C5" stroke-width="1.4" stroke-dasharray="4 5" opacity=".7"/>
+            <text x="312" y="135" text-anchor="end" font-size="11" fill="#2EE6C5" font-family="monospace">valence +</text>
+            <text x="34" y="135" font-size="11" fill="#98A2B6" font-family="monospace">valence −</text>
+            <text x="176" y="24" font-size="11" fill="#6C8CFF" font-family="monospace">arousal +</text>
+            <text x="176" y="222" font-size="11" fill="#98A2B6" font-family="monospace">arousal −</text>
+            <g font-family="sans-serif" font-size="12" font-weight="600">
+              <text x="232" y="66"  fill="#F0C24B" text-anchor="middle">喜び / 興奮</text>
+              <text x="104" y="66"  fill="#B08CFF" text-anchor="middle">怒り / 驚き</text>
+              <text x="104" y="184" fill="#6C8CFF" text-anchor="middle">悲しみ</text>
+              <text x="232" y="184" fill="#2EE6C5" text-anchor="middle">安心 / 満足</text>
+            </g>
+            <circle cx="215" cy="86" r="5" fill="#2EE6C5"/>
+            <circle cx="196" cy="104" r="3.4" fill="#2EE6C5" opacity=".55"/>
+            <circle cx="182" cy="114" r="2.4" fill="#2EE6C5" opacity=".3"/>
+            <text x="222" y="106" font-size="10.5" fill="#C4CBD9" font-family="monospace">現在の感情</text>
+          </svg>
+          <figcaption>感情は円環上の座標として連続的に扱い、時間経過で中立へ戻る</figcaption>
+        </figure>
+        <ul class="pts">
+          <li><strong>短期の感情</strong>：Russell の感情円環（valence / arousal）に基づく連続値として保持し、刺激で動いた後は時間経過で中立へ減衰させる</li>
+          <li><strong>離散的な感情表現</strong>：Ekman の 6 基本感情を円環座標から導き、表情・アニメーションのブレンドに使う</li>
+          <li><strong>長期の関係性</strong>：信頼・親密度・機嫌を別レイヤーで保持し、同じ働きかけでも反応の出方が変わるようにする</li>
+          <li><strong>個体差</strong>：個性パラメータで感情の動きやすさ・戻りやすさを変え、同じモデルから性格の違うキャラクターを作れるようにする</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">システム構成</h2>
+        <p>
+          Unity 側は表示・入力・アニメーション（表情と動作のブレンド）を担当し、
+          感情の更新は Python 側の推論サーバーに任せています。両者は <strong>WebSocket で常時接続</strong>し、
+          タッチや会話といった刺激を送ると、更新後の感情状態が返ってきてアニメーションに反映されます。
+        </p>
+        <ul class="pts">
+          <li><strong>Python (FastAPI + PyTorch)</strong>：感情遷移の推論、関係性の更新、時系列の記憶を担う</li>
+          <li><strong>GRU による時系列記憶</strong>：直前の刺激だけでなく、やり取りの流れを踏まえて感情を更新する</li>
+          <li><strong>VAE による動作スタイル</strong>：同じ感情でも動きの出方に個体差を持たせるための潜在表現</li>
+          <li><strong>ルールベースのフォールバック</strong>：学習済みモデルが無い環境でも動くよう、規則ベースの感情遷移を併設して単体で起動できるようにした</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">学習データをどう用意したか</h2>
+        <p>
+          「この刺激に対して感情がこう動くのが正解」というデータは既存のものが無いため、
+          <strong>ルールベースの教師モデルで合成データを生成し、それを GRU に学習させる</strong>方針を取りました。
+          個性パラメータを振って複数のキャラクターぶんのデータを作ることで、
+          モデルが個体差を含めて学習できるようにしています。
+        </p>
+        <div class="note">
+          <b>設計判断：</b>最初から学習モデルに寄せず、ルールベースで「納得できる挙動」を作ってから
+          それを学習で置き換える順番にしました。<strong>挙動の良し悪しを判断する基準を先に手で作る</strong>ほうが、
+          データが存在しない領域では早く前に進めると考えたためです。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="05">現状と今後</h2>
+        <p>
+          感情モデル・通信・アニメーションブレンドのコアループは動作しており、
+          身体動作の手続き的生成（呼吸・重心移動）と音声入力への反応が今後の実装項目です。
+          研究で進めている感情軸付きのモーション生成と接続することで、
+          <strong>表情だけでなく身体全体で感情が伝わるアバター</strong>を目標にしています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>心理学の感情モデルを実装可能な形に設計</li>
+          <li>短期の感情と長期の関係性を分離</li>
+          <li>合成データで時系列モデルを学習</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="avatarchat.html">AvatarChat <span aria-hidden="true">→</span></a></li>
+          <li><a href="humot.html">HuMoT 再現実装 <span aria-hidden="true">→</span></a></li>
+          <li><a href="robocustom.html">ROBOCustom <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="avatarchat.html"><div class="dir">← PREV</div><div class="ttl">AvatarChat</div></a>
+      <a class="next" href="humot.html"><div class="dir">NEXT →</div><div class="ttl">HuMoT 再現実装</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

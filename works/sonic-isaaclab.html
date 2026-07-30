@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONIC on Isaac Lab（Windows 移植）| 福田晃己 Portfolio</title>
+<meta name="description" content="NVIDIA GEAR-SONIC のヒューマノイド全身制御をWindowsネイティブのIsaac Lab 2.3.2 / Isaac Sim 5.1 上で動作検証した記録。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">Robotics / Humanoid RL</div>
+    <h1>SONIC on Isaac Lab（Windows 移植）</h1>
+    <p class="sub">
+      NVIDIA が公開しているヒューマノイド全身制御モデルを、<strong>Windows ネイティブの Isaac Lab 環境で
+      動作検証</strong>しました。Linux 前提の依存関係やパス処理をパッチし、
+      ヒューマノイドのモーショントラッキング学習を回せる状態まで持ち込んでいます。
+    </p>
+    <div class="chips">
+      <span class="chip key">Isaac Lab</span><span class="chip key">Isaac Sim</span><span class="chip key">強化学習</span>
+      <span class="chip">ヒューマノイド全身制御</span><span class="chip">Windows 移植</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人（環境構築 / 移植 / 動作検証）</dd></div>
+      <div><dt>SIM</dt><dd>Isaac Lab 2.3.2 / Isaac Sim 5.1（Windows ネイティブ）</dd></div>
+      <div><dt>TARGET</dt><dd>ヒューマノイドのモーショントラッキング RL</dd></div>
+      <div><dt>STACK</dt><dd>Python, PyTorch, CUDA</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">目的</h2>
+        <p>
+          研究で扱っているのは「モーションを生成する側」ですが、生成した動きが<strong>実際の身体で成立するのか</strong>は
+          物理シミュレータで確かめる必要があります。そこで、ヒューマノイドに参照モーションを追従させる
+          全身制御の枠組みを自分の環境で動かし、生成モーションと物理制御をつなぐ足場を作ることを目的にしました。
+        </p>
+        <p>
+          WSL や Linux マシンを用意する方法もありますが、GPU をそのまま使えて研究の他の環境と行き来しやすいことを
+          重視して、<strong>Windows ネイティブで動かす</strong>選択をしています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">Windows で動かすまで</h2>
+        <ul class="pts">
+          <li><strong>Isaac Sim / Isaac Lab の構成合わせ</strong>：シミュレータとフレームワークのバージョン組み合わせを合わせ、Python 環境を分離して構築</li>
+          <li><strong>Linux 依存箇所のパッチ</strong>：パス区切り、シンボリックリンク、シェル起動を前提としたコードを Windows で成立する形に修正</li>
+          <li><strong>学習スクリプトの実行経路の整備</strong>：GUI ありの可視化実行とヘッドレス学習の両方を、同じ設定から切り替えられるようにした</li>
+          <li><strong>クラッシュ時の切り分け</strong>：シミュレータ側の落ち方（起動時 / 初期化時 / 学習中）でパターンを分類し、原因ごとの対処を手順として残した</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">検証内容</h2>
+        <p>
+          構築後は、ヒューマノイドが参照モーションを追従する学習を実行し、可視化しながら挙動を確認しました。
+          方策が破綻するケースと安定するケースを見比べることで、
+          <strong>「参照モーションが物理的に無理をしている箇所ほど追従が崩れる」</strong>という当たり前だが重要な傾向を
+          自分の目で確認できました。
+        </p>
+        <div class="note">
+          <b>研究への持ち帰り：</b>生成モデルが出したモーションは、見た目が自然でも
+          接地や重心の面で物理的に成立しないことがあります。<strong>生成側の評価に物理シミュレータでの追従性を
+          持ち込める</strong>ようになったことが、この環境構築の一番の収穫です。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">関連する取り組み</h2>
+        <p>
+          並行して、四足ロボット Unitree Go2 の歩行方策を強化学習で獲得し、実機の関節制御へ展開する
+          sim-to-real も行っています（<a href="../research/physical-ai.html" style="color:var(--acc)">研究ページ「強化学習と sim-to-real」</a>参照）。
+          シミュレータ上での学習と実機での挙動の差を経験しているため、
+          シミュレーション結果をそのまま信じずに検証する視点を持って取り組めています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>Linux 前提のロボット学習環境を Windows で稼働</li>
+          <li>GUI / ヘッドレス両対応の実行経路を整備</li>
+          <li>生成モーションの物理的妥当性を検証する足場</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="most.html">MoST Windows 移植 <span aria-hidden="true">→</span></a></li>
+          <li><a href="humot.html">HuMoT 再現実装 <span aria-hidden="true">→</span></a></li>
+          <li><a href="robocustom.html">ROBOCustom <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="most.html"><div class="dir">← PREV</div><div class="ttl">MoST（CVPR 2024）Windows 移植</div></a>
+      <a class="next" href="robocustom.html"><div class="dir">NEXT →</div><div class="ttl">ROBOCustom</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

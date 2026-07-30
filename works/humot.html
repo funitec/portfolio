@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HuMoT 再現実装 | 福田晃己 Portfolio</title>
+<meta name="description" content="公式コード非公開のトポロジー非依存モーションリターゲティングTransformer（arXiv:2305.18897）を論文のみからPyTorchでフルスクラッチ再現した記録。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">Paper Reproduction / PyTorch</div>
+    <h1>HuMoT 再現実装</h1>
+    <p class="sub">
+      骨格構造（トポロジー）の異なるキャラクター間でモーションを移し替える Transformer を、
+      <strong>公式実装が公開されていない状態で論文だけを頼りにフルスクラッチ再現</strong>しました。
+      モデル定義から学習ループまで、約 216 万パラメータぶんを自分で書き切った実装です。
+    </p>
+    <div class="chips">
+      <span class="chip key">PyTorch</span><span class="chip key">Transformer</span>
+      <span class="chip">XCiT ブロック</span><span class="chip">モーションリターゲティング</span><span class="chip">論文再現</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人（論文読解 / 実装 / 学習）</dd></div>
+      <div><dt>PAPER</dt><dd>arXiv:2305.18897</dd></div>
+      <div><dt>STACK</dt><dd>Python, PyTorch</dd></div>
+      <div><dt>SCALE</dt><dd>約 216 万パラメータ</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <section class="block">
+        <h2 data-n="01">なぜ再現したか</h2>
+        <p>
+          研究でモーション生成を扱う上で、<strong>骨格構造が違うキャラクター間でどう動きを対応づけるか</strong>は
+          避けて通れない問題です。関節数や階層が違うモデルにモーションを流し込むには、
+          「この関節はどの関節に相当するか」を固定の対応表に頼らずに扱う必要があります。
+        </p>
+        <p>
+          そのアプローチとして、関節をトークンとして扱いトポロジーに依存しない表現を学習する手法に興味を持ち、
+          読んだだけで終わらせず<strong>手を動かして構造を理解するために再現実装</strong>を選びました。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">実装したもの</h2>
+        <ul class="pts">
+          <li><strong>関節トークン化</strong>：スケルトンの各関節を系列要素として扱い、関節数が変わっても同じモデルで処理できる入力表現を実装</li>
+          <li><strong>XCiT ブロック</strong>：チャネル方向に注意を取る Transformer ブロックを論文の記述に沿って実装し、関節数が増えても計算量が跳ねない構成にした</li>
+          <li><strong>学習ループ一式</strong>：データローダ、損失計算、最適化、チェックポイント保存までを自作</li>
+          <li><strong>形状検証</strong>：各ブロックの入出力次元をユニット単位で確認し、論文記載のパラメータ数と突き合わせて構造の妥当性を検証</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">詰まった点と対処</h2>
+        <h3>論文に書かれていない部分をどう埋めるか</h3>
+        <p>
+          公式コードが無いため、正規化の位置、埋め込みの与え方、損失の重み付けといった細部は論文から読み取れません。
+          そこで<strong>「論文の数式・図と整合する実装を複数候補として書き、パラメータ数と出力形状が記載値に合うものを採用する」</strong>
+          という進め方をしました。数字で照合できる指標を軸に置くことで、推測の当たり外れを判定できるようにしています。
+        </p>
+        <h3>データ表現の統一</h3>
+        <p>
+          モーションデータは形式ごとに関節定義も座標系も異なるため、まず<strong>自分の実装が期待する共通表現に落とす前処理</strong>を
+          用意しました。ここを曖昧にしたまま学習を回すと、モデルの問題かデータの問題か切り分けられなくなるため、
+          前処理の検証に時間を使いました。
+        </p>
+        <div class="note">
+          <b>得られたもの：</b>論文の Transformer 系アーキテクチャを、図から実装に落とせる状態になりました。
+          この経験があるため、現在の研究でもモデル構造を<strong>既存実装の改造ではなく自分で設計する</strong>形で進められています。
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">研究とのつながり</h2>
+        <p>
+          ここで身についた「関節をトークンとして扱う」設計思想と Transformer 実装の勘所は、
+          現在の研究テーマである<a href="../research/motion-style.html" style="color:var(--acc)">キャラクター性と感情を分離したモーション生成</a>で
+          そのまま土台になっています。またモーションデータの前処理規約を自分で整えた経験は、
+          複数データセットを扱う研究環境の構築でも役立っています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>公式実装なしで論文から完全再現</li>
+          <li>パラメータ数照合で構造の妥当性を検証</li>
+          <li>Transformer を設計できる状態になった</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="most.html">MoST Windows 移植 <span aria-hidden="true">→</span></a></li>
+          <li><a href="sonic-isaaclab.html">SONIC on Isaac Lab <span aria-hidden="true">→</span></a></li>
+          <li><a href="avatarchat.html">AvatarChat <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="emotion-avatar.html"><div class="dir">← PREV</div><div class="ttl">Emotion Avatar</div></a>
+      <a class="next" href="most.html"><div class="dir">NEXT →</div><div class="ttl">MoST（CVPR 2024）Windows 移植</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROBOCustom | 福田晃己 Portfolio</title>
+<meta name="description" content="自作ノードエディタでロボットの行動ロジックを組み、AI同士のバトルで撃破数を競うUnity製ゲーム ROBOCustom。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">Game / Unity + Visual Programming</div>
+    <h1>ROBOCustom</h1>
+    <p class="sub">
+      プレイヤーがロボットを操作するのではなく、<strong>「ロボットの考え方」をノードエディタで組んで戦わせる</strong>ゲーム。
+      組んだロジックどおりに AI が動き、撃破数を競います。ロボコンでの自動制御開発の経験を、
+      そのままゲームの題材にした個人開発です。
+    </p>
+    <div class="chips">
+      <span class="chip key">Unity</span><span class="chip key">C#</span>
+      <span class="chip">ノードエディタ</span><span class="chip">Game AI</span><span class="chip">物理判定</span><span class="chip">アイテムシステム</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人開発（企画 / 実装）</dd></div>
+      <div><dt>STACK</dt><dd>Unity, C#</dd></div>
+      <div><dt>GENRE</dt><dd>ロボットバトル × ビジュアルプログラミング</dd></div>
+      <div><dt>STATUS</dt><dd>コアシステム実装済み / 継続開発中</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <div class="vfacade" data-embed="https://drive.google.com/file/d/18fY_EPGd2b-lpJh02Hvm1ghkDckH_oQz/preview" role="button" tabindex="0" aria-label="ROBOCustom のプレイ動画を再生">
+        <div class="wglyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h.01M16 16h.01"/></svg>
+          <span>ROBOCUSTOM — GAMEPLAY</span>
+        </div>
+        <div class="play" aria-hidden="true">▶</div>
+        <div class="vlbl">PLAY — プレイ動画</div>
+      </div>
+      <p class="cap" style="margin:12px 0 30px">ノードエディタで組んだロジックで AI 同士が戦う様子</p>
+
+      <section class="block">
+        <h2 data-n="01">企画の意図</h2>
+        <p>
+          ロボコンで自動制御を作っていたときに一番面白かったのは、<strong>「自分が書いた判断ロジックのとおりに
+          機体が勝手に動く瞬間」</strong>でした。その体験をゲームとして再現したいと考えたのが出発点です。
+        </p>
+        <p>
+          プレイヤーが直接操作すると腕前の勝負になってしまうため、操作は AI に任せ、
+          プレイヤーは<strong>行動方針の設計だけを担当する</strong>形にしています。
+          結果として「負けた理由が自分のロジックにある」という納得感が生まれる構造になりました。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">実装したシステム</h2>
+        <ul class="pts">
+          <li><strong>ノードエディタ（自作）</strong>：条件ノードと行動ノードをつないで行動ロジックを組み立てる UI。ノードの追加・接続・削除と、組んだロジックの保存に対応</li>
+          <li><strong>ロジック実行エンジン</strong>：組まれたノードグラフを毎フレーム評価し、ロボットの行動（移動・照準・攻撃）を決定する</li>
+          <li><strong>ゲーム AI とバトル進行</strong>：複数機体を同時に動かし、撃破数を集計。相手の位置・距離・残機といった状態をノードの条件から参照できるようにした</li>
+          <li><strong>物理判定</strong>：弾と機体の当たり判定、被弾によるノックバックなどを Unity の物理で処理</li>
+          <li><strong>パーツ / 武器のアイテムシステム</strong>：機体に装備を組み替えられる仕組みと、フィールド上のアイテム拾得処理を実装</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">設計で苦労した点</h2>
+        <h3>「組めるが破綻しない」ノード設計</h3>
+        <p>
+          自由に組めるようにすると、循環参照や条件が一つも成立しない状態が容易に作れてしまいます。
+          そのため<strong>評価の順序を決め、どの条件にも当てはまらない場合の既定行動を必ず持たせる</strong>構造にして、
+          プレイヤーがどんなグラフを作ってもロボットが停止しないようにしました。
+        </p>
+        <h3>ロボコンの経験が効いた部分</h3>
+        <p>
+          NHK ロボコンでは、移動先や行動手順をプログラミング不要で編集できる<strong>行動計画エディタ</strong>を
+          作っていました。そこで得た「非プログラマにも編集させる UI をどう作るか」という感覚が、
+          このゲームのノードエディタ設計にそのまま活きています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">今後</h2>
+        <p>
+          対戦バランスの調整と、組んだロジックを他プレイヤーと共有できる仕組みを検討中です。
+          将来的には強化学習で獲得した方策をノードグラフと戦わせる、といった拡張も考えています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>ノードエディタを自作し行動ロジックを可視化</li>
+          <li>破綻しないグラフ評価の仕組みを設計</li>
+          <li>ロボコンの行動計画エディタ経験を応用</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="slime-adventure.html">SlimeAdventure <span aria-hidden="true">→</span></a></li>
+          <li><a href="blender-autorig.html">自動リギングアドオン <span aria-hidden="true">→</span></a></li>
+          <li><a href="emotion-avatar.html">Emotion Avatar <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="sonic-isaaclab.html"><div class="dir">← PREV</div><div class="ttl">SONIC on Isaac Lab</div></a>
+      <a class="next" href="blender-autorig.html"><div class="dir">NEXT →</div><div class="ttl">自動リギングアドオン（Blender）</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>

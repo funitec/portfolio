@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SlimeAdventure | 福田晃己 Portfolio</title>
+<meta name="description" content="Unity + Blender で個人制作したスマホ向け3Dアクションゲーム SlimeAdventure。QTE戦闘・スライム仲間システム・ボス戦を約1.5ヶ月で実装。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230A0C12'/><circle cx='50' cy='30' r='8' fill='none' stroke='%232EE6C5' stroke-width='5'/><path d='M50 40 L50 62 M50 45 L36 57 M50 45 L64 57 M50 62 L40 86 M50 62 L60 86' stroke='%232EE6C5' stroke-width='5.5' stroke-linecap='round' fill='none'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="progress"></div>
+
+<nav class="nav solid">
+  <a class="nav-logo" href="../index.html"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#profile">PROFILE</a></li>
+    <li><a href="../index.html#achievements">ACHIEVEMENTS</a></li>
+    <li><a href="../research/index.html">RESEARCH</a></li>
+    <li><a href="../index.html#works">WORKS</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+</nav>
+
+<header class="detail-head">
+  <div class="wrap">
+    <a class="crumb" href="../index.html#works"><span aria-hidden="true">←</span> WORKS 一覧へ</a>
+    <div class="eyebrow">Game / Unity + Blender</div>
+    <h1>SlimeAdventure</h1>
+    <p class="sub">
+      スライムと勇者が力を合わせて敵を倒しながら進む、スマホ向けリアルタイム 3D アクション。
+      企画・プログラム・3D モデルまで一人で制作し、約 1.5 ヶ月で遊べる状態まで仕上げました。
+    </p>
+    <div class="chips">
+      <span class="chip key">Unity</span><span class="chip key">C#</span><span class="chip key">Blender</span>
+      <span class="chip">QTE</span><span class="chip">キャラクター AI</span><span class="chip">モバイル最適化</span>
+    </div>
+    <dl class="meta">
+      <div><dt>ROLE</dt><dd>個人制作（企画 / プログラム / 3D モデリング）</dd></div>
+      <div><dt>PERIOD</dt><dd>約 1.5 ヶ月</dd></div>
+      <div><dt>STACK</dt><dd>Unity, C#, Blender</dd></div>
+      <div><dt>TARGET</dt><dd>スマートフォン（タッチ操作）</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="detail-body">
+  <div class="wrap detail-grid">
+    <div>
+
+      <div class="vfacade" style="margin-bottom:14px" data-embed="https://drive.google.com/file/d/18yyRl0tOtSZl8B0CW1qop_zBi64hxykp/preview" role="button" tabindex="0" aria-label="SlimeAdventure のプレイ動画を再生">
+        <img src="../img/slime-action3.jpg" alt="SlimeAdventure のプレイ画面" loading="lazy">
+        <div class="play" aria-hidden="true">▶</div>
+        <div class="vlbl">PLAY — プレイ動画</div>
+      </div>
+      <p class="cap" style="margin-bottom:26px">実際のプレイ映像（戦闘・仲間システム・ボス戦）</p>
+
+      <div class="gal">
+        <div class="gal-main"><img src="../img/slime-action1.jpg" alt="SlimeAdventure のゲーム画面：スライムと勇者が敵と戦っている場面" width="832" height="495"></div>
+        <div class="gal-thumbs">
+          <button class="on" data-src="../img/slime-action1.jpg" aria-label="スクリーンショット 1"><img src="../img/slime-action1.jpg" alt=""></button>
+          <button data-src="../img/slime-action2.jpg" aria-label="スクリーンショット 2"><img src="../img/slime-action2.jpg" alt=""></button>
+          <button data-src="../img/slime-action3.jpg" aria-label="スクリーンショット 3"><img src="../img/slime-action3.jpg" alt=""></button>
+          <button data-src="../img/slime-action4.jpg" aria-label="スクリーンショット 4"><img src="../img/slime-action4.jpg" alt=""></button>
+        </div>
+      </div>
+
+      <section class="block">
+        <h2 data-n="01">概要</h2>
+        <p>
+          「一人で戦うのではなく、仲間が増えていくアクション」を作りたくて企画したゲームです。
+          プレイヤーは勇者を操作し、フィールドに散らばるアイテムを集めるとスライムの仲間が増え、
+          集めた仲間と一緒にボスへ挑みます。戦闘には QTE（クイックタイムイベント）を織り込み、
+          ボタン連打で終わらない手触りにしました。
+        </p>
+        <p>
+          キャラクター・小物・フィールドの 3D モデルはすべて Blender で自作しており、
+          アセットの用意からゲームループの実装、スマホ実機での動作確認まで一貫して行っています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="02">実装したシステム</h2>
+        <ul class="pts">
+          <li><strong>スライム仲間システム</strong>：アイテム回収数に応じて仲間が追加され、追従・攻撃を行う。仲間ごとに追従位置を分散させ、団子状に固まらないよう制御</li>
+          <li><strong>QTE 戦闘</strong>：一定条件で入力受付ウィンドウが開き、タイミング入力に成功すると強攻撃に派生する仕組み</li>
+          <li><strong>キャラクター AI</strong>：敵と仲間の状態遷移（待機 / 追跡 / 攻撃 / 被弾）をステートマシンで管理</li>
+          <li><strong>ボス戦</strong>：フェーズごとに行動パターンを切り替え、集めた仲間の数が攻略難度に影響する設計</li>
+          <li><strong>タッチ操作 UI</strong>：仮想スティックとアクションボタンを親指の届く範囲に配置し、スマホの狭い画面でも操作できるレイアウトに調整</li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2 data-n="03">設計で考えたこと</h2>
+        <h3>報酬ループを「仲間が増える」ことに集約する</h3>
+        <p>
+          スコアや装備ではなく、<strong>仲間の数がそのまま強さと画面の賑やかさに直結する</strong>構造にしました。
+          探索の見返りが視覚的に分かるため、プレイヤーが次のアイテムを探す動機を作りやすいと考えたためです。
+        </p>
+        <h3>モバイルで動かすための割り切り</h3>
+        <p>
+          仲間が増えると同時に動くキャラクター数も増えるため、モデルはローポリ + テクスチャで軽量に作り、
+          仲間の思考更新を毎フレームではなく間隔を空けて回すことで負荷を抑えました。
+          描画と AI のどちらがボトルネックかを実機で確認しながら調整しています。
+        </p>
+      </section>
+
+      <section class="block">
+        <h2 data-n="04">振り返り</h2>
+        <p>
+          約 1.5 ヶ月という期間で「遊べる状態」に到達させるため、やりたい要素を一度すべて書き出し、
+          コアループ（探索 → 仲間増加 → ボス戦）に効くものだけを残しました。
+          <strong>スコープを削る判断を先にしておくことが、個人制作を完成させる上で一番効いた</strong>という実感があります。
+        </p>
+        <p>
+          また、3D モデルを自分で作ったことで「実装しやすい形状・ボーン構成」を意識できるようになり、
+          この経験が後の <a href="blender-autorig.html" style="color:var(--acc)">自動リギングアドオン</a> の制作につながっています。
+        </p>
+      </section>
+
+    </div>
+
+    <aside class="side">
+      <div class="side-box">
+        <h4>HIGHLIGHTS</h4>
+        <ul class="pts">
+          <li>企画から 3D アセット制作まで個人で完結</li>
+          <li>QTE と仲間システムでコアループを設計</li>
+          <li>スマホ実機での負荷調整まで実施</li>
+        </ul>
+      </div>
+      <div class="side-box">
+        <h4>OTHER WORKS</h4>
+        <ul class="side-list">
+          <li><a href="robocustom.html">ROBOCustom <span aria-hidden="true">→</span></a></li>
+          <li><a href="blender-modeling.html">Blender モデリング <span aria-hidden="true">→</span></a></li>
+          <li><a href="blender-autorig.html">自動リギングアドオン <span aria-hidden="true">→</span></a></li>
+          <li><a href="../index.html#works">すべての制作物 <span aria-hidden="true">→</span></a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    <nav class="pager" aria-label="前後の制作物">
+      <a class="prev" href="triposplat.html"><div class="dir">← PREV</div><div class="ttl">画像 → 3D 生成のローカル運用</div></a>
+      <a class="next" href="avatarchat.html"><div class="dir">NEXT →</div><div class="ttl">AvatarChat</div></a>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>© 2026 福田 晃己 — Robotics × AI</span>
+    <span><a href="../index.html">TOP へ戻る</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js" defer></script>
+</body>
+</html>
