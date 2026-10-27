@@ -23,6 +23,22 @@
     onScroll();
   }
 
+  /* ---- highlight the nav item for the section in view ---- */
+  const navMap = new Map(
+    $$('.nav-links a[href^="#"]').map(a => [a.getAttribute('href').slice(1), a])
+  );
+  if (navMap.size && 'IntersectionObserver' in window) {
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        navMap.forEach(a => a.classList.remove('cur'));
+        const a = navMap.get(e.target.id);
+        if (a) a.classList.add('cur');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    navMap.forEach((_, id) => { const sec = document.getElementById(id); if (sec) spy.observe(sec); });
+  }
+
   /* ---- mobile nav ---- */
   const toggle = $('.nav-toggle');
   const links  = $('.nav-links');
