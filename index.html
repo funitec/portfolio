@@ -23,10 +23,11 @@
   <a class="nav-logo" href="#top"><b>福田 晃己</b><span>ROBOTICS × AI</span></a>
   <ul class="nav-links">
     <li><a href="#profile">PROFILE</a></li>
-    <li><a href="#achievements">ACHIEVEMENTS</a></li>
     <li><a href="#research">RESEARCH</a></li>
+    <li><a href="#achievements">ACHIEVEMENTS</a></li>
     <li><a href="#works">WORKS</a></li>
     <li><a href="#skills">SKILLS</a></li>
+    <li><a href="#vision">VISION</a></li>
     <li><a href="#contact">CONTACT</a></li>
   </ul>
   <button class="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
@@ -52,8 +53,8 @@
         <div class="fact c"><i>SIM2REAL</i>Unitree Go2 の強化学習方策を実機制御まで展開</div>
       </div>
       <div class="hero-btns">
-        <a class="btn btn-fill" href="#works">制作物を見る<span aria-hidden="true">→</span></a>
-        <a class="btn" href="#research">研究内容</a>
+        <a class="btn btn-fill" href="#profile">自己紹介を見る<span aria-hidden="true">→</span></a>
+        <a class="btn" href="#works">制作物</a>
         <a class="btn" href="https://github.com/funitec" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
@@ -81,7 +82,8 @@
   <div class="wrap">
     <div class="sec-head rv">
       <div class="eyebrow">01 / Profile</div>
-      <h2>プロフィール</h2>
+      <h2>自己紹介</h2>
+      <p class="key-msg">ロボットの<strong>「動き」</strong>を、生成モデルの研究と実機・アプリの実装の両方からつくっています。</p>
     </div>
     <div class="prof-grid">
       <div class="prof-text rv">
@@ -106,15 +108,115 @@
         <div class="stat c"><b>sim-to-real</b><span>Unitree Go2 の強化学習を<br>実機制御まで展開</span></div>
       </div>
     </div>
+
+    <div class="str-head rv">
+      <h3>3 つの強み</h3>
+      <p>それぞれ、このあとのセクションで具体的にお話しします。</p>
+    </div>
+    <div class="str-grid">
+      <a class="str rv" href="#research">
+        <span class="str-n">01</span>
+        <h4>「動き」を生成するモデルをつくれる</h4>
+        <p>Transformer と拡散モデルによるモーション生成フレームワークをスクラッチで構築。キャラクター性と感情を分離して動きを生成する研究に取り組んでいます。</p>
+        <span class="str-go">研究へ<span aria-hidden="true">→</span></span>
+      </a>
+      <a class="str rv" href="#achievements">
+        <span class="str-n">02</span>
+        <h4>チームで結果を出せる</h4>
+        <p>レスコンではチームリーダー、NHK ロボコンではメインプログラマー。<strong>消防庁長官賞</strong>と<strong>チーム史上初の全国大会出場</strong>につなげました。</p>
+        <span class="str-go">大会実績へ<span aria-hidden="true">→</span></span>
+      </a>
+      <a class="str rv" href="#works">
+        <span class="str-n">03</span>
+        <h4>学習から実機・アプリまで通して作れる</h4>
+        <p>学習パイプラインの構築から、実機制御（sim-to-real）・ゲーム・ツールの実装まで。個人開発・論文再現を含め 10 作品を制作しています。</p>
+        <span class="str-go">制作物へ<span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== research ===================== -->
+<section class="sec" id="research">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">02 / Research</div>
+      <h2>研究</h2>
+      <p class="key-msg">いま取り組んでいるのは、<strong>キャラクター性と感情を分離したモーション生成</strong>です。</p>
+      <p>モーション生成とフィジカル AI。生成モデルの研究から、実機ロボットでの検証まで取り組んでいます。</p>
+      <div style="margin-top:24px">
+        <a class="btn btn-fill" href="research/index.html">研究の詳細を見る<span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="r-list">
+
+      <a class="rcard main rv" href="research/motion-style.html">
+        <div class="r-inner stack">
+          <div>
+            <div class="rflag now"><span class="dot"></span>CURRENT — 大学院研究</div>
+            <h3>キャラクターの一貫性と感情を分離したモーションスタイル生成</h3>
+            <p>
+              「そのキャラクターらしさ」と「感情表現」を独立した潜在軸として分離し、任意の組み合わせで
+              モーションを生成する研究です。Transformer と拡散モデルをコアに据えた生成フレームワークを
+              スクラッチで構築し、ロボットやキャラクターが意図を非言語的に伝える動作表現の実現を目指しています。
+              学会発表を準備中です。
+            </p>
+            <div class="chips">
+              <span class="chip key">PyTorch</span><span class="chip key">拡散モデル</span><span class="chip key">Transformer</span>
+              <span class="chip">潜在空間の分離</span><span class="chip">モーションデータ前処理</span><span class="chip">three.js 可視化</span>
+            </div>
+            <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+          </div>
+          <figure class="fig wide">
+            <img src="assets/img/style-grid.svg" width="950" height="484" loading="lazy"
+                 alt="単調な歩行モーションを、キャラクターの軸と感情の軸の組み合わせで9通りのスタイルに変換した図">
+            <figcaption>同じ「歩く」動作に、<strong>キャラクター性</strong>と<strong>感情</strong>を別々に付与して生成する</figcaption>
+          </figure>
+        </div>
+      </a>
+
+      <a class="rcard rv" href="research/physical-ai.html">
+        <div class="rflag">PHYSICAL AI</div>
+        <h3>Unitree Go2 を用いたフィジカル AI（強化学習 × sim-to-real）</h3>
+        <p>
+          Genesis・Isaac Sim 上の強化学習で四足ロボット Unitree Go2 の歩行方策を学習し、実機の関節モーター
+          制御への展開（sim-to-real）まで実施。ドメインランダマイゼーションの設計と報酬関数のチューニングが
+          sim-to-real の成否を左右することを、実機テストを通じて体で覚えました。オリジナル設計の
+          倒立振子ロボットでの強化学習も行っています。
+        </p>
+        <div class="chips">
+          <span class="chip key">強化学習</span><span class="chip key">sim-to-real</span>
+          <span class="chip">Isaac Sim</span><span class="chip">Genesis</span><span class="chip">ドメインランダマイゼーション</span>
+        </div>
+        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="rcard rv" href="research/rehab.html">
+        <div class="rflag">学部研究</div>
+        <h3>リハビリテーション機器のシステム改修と訓練支援ゲームの開発</h3>
+        <p>
+          脳卒中患者向け上肢訓練機器のシステム改修を担当し、訓練効果の向上と機器の機械的評価を可能にする
+          ソフトウェアを開発。あわせてリハビリへのモチベーションを高める訓練支援ゲームを制作し、
+          「継続したくなる訓練体験」の設計に取り組みました。
+        </p>
+        <div class="chips">
+          <span class="chip">医療機器ソフト改修</span><span class="chip">Unity</span><span class="chip">評価システム設計</span>
+        </div>
+        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
+      </a>
+
+    </div>
   </div>
 </section>
 
 <!-- ===================== achievements ===================== -->
-<section class="sec" id="achievements">
+<section class="sec alt" id="achievements">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">02 / Achievements</div>
+      <div class="eyebrow">03 / Achievements</div>
       <h2>大会実績</h2>
+      <p class="key-msg">学部ではロボコンに打ち込み、<strong>チームを率いて結果を出す</strong>経験を積みました。</p>
       <p>ロボコンを中心とした大会実績です。チームマネジメントからソフトウェア設計・実装まで担当しました。</p>
     </div>
 
@@ -262,85 +364,13 @@
   </div>
 </section>
 
-<!-- ===================== research ===================== -->
-<section class="sec alt" id="research">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <div class="eyebrow">03 / Research</div>
-      <h2>研究</h2>
-      <p>モーション生成とフィジカル AI。生成モデルの研究から、実機ロボットでの検証まで取り組んでいます。</p>
-      <div style="margin-top:24px">
-        <a class="btn btn-fill" href="research/index.html">研究の詳細を見る<span aria-hidden="true">→</span></a>
-      </div>
-    </div>
-
-    <div class="r-list">
-
-      <a class="rcard main rv" href="research/motion-style.html">
-        <div class="r-inner stack">
-          <div>
-            <div class="rflag now"><span class="dot"></span>CURRENT — 大学院研究</div>
-            <h3>キャラクターの一貫性と感情を分離したモーションスタイル生成</h3>
-            <p>
-              「そのキャラクターらしさ」と「感情表現」を独立した潜在軸として分離し、任意の組み合わせで
-              モーションを生成する研究です。Transformer と拡散モデルをコアに据えた生成フレームワークを
-              スクラッチで構築し、ロボットやキャラクターが意図を非言語的に伝える動作表現の実現を目指しています。
-              学会発表を準備中です。
-            </p>
-            <div class="chips">
-              <span class="chip key">PyTorch</span><span class="chip key">拡散モデル</span><span class="chip key">Transformer</span>
-              <span class="chip">潜在空間の分離</span><span class="chip">モーションデータ前処理</span><span class="chip">three.js 可視化</span>
-            </div>
-            <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
-          </div>
-          <figure class="fig wide">
-            <img src="assets/img/style-grid.svg" width="950" height="484" loading="lazy"
-                 alt="単調な歩行モーションを、キャラクターの軸と感情の軸の組み合わせで9通りのスタイルに変換した図">
-            <figcaption>同じ「歩く」動作に、<strong>キャラクター性</strong>と<strong>感情</strong>を別々に付与して生成する</figcaption>
-          </figure>
-        </div>
-      </a>
-
-      <a class="rcard rv" href="research/physical-ai.html">
-        <div class="rflag">PHYSICAL AI</div>
-        <h3>Unitree Go2 を用いたフィジカル AI（強化学習 × sim-to-real）</h3>
-        <p>
-          Genesis・Isaac Sim 上の強化学習で四足ロボット Unitree Go2 の歩行方策を学習し、実機の関節モーター
-          制御への展開（sim-to-real）まで実施。ドメインランダマイゼーションの設計と報酬関数のチューニングが
-          sim-to-real の成否を左右することを、実機テストを通じて体で覚えました。オリジナル設計の
-          倒立振子ロボットでの強化学習も行っています。
-        </p>
-        <div class="chips">
-          <span class="chip key">強化学習</span><span class="chip key">sim-to-real</span>
-          <span class="chip">Isaac Sim</span><span class="chip">Genesis</span><span class="chip">ドメインランダマイゼーション</span>
-        </div>
-        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
-      </a>
-
-      <a class="rcard rv" href="research/rehab.html">
-        <div class="rflag">学部研究</div>
-        <h3>リハビリテーション機器のシステム改修と訓練支援ゲームの開発</h3>
-        <p>
-          脳卒中患者向け上肢訓練機器のシステム改修を担当し、訓練効果の向上と機器の機械的評価を可能にする
-          ソフトウェアを開発。あわせてリハビリへのモチベーションを高める訓練支援ゲームを制作し、
-          「継続したくなる訓練体験」の設計に取り組みました。
-        </p>
-        <div class="chips">
-          <span class="chip">医療機器ソフト改修</span><span class="chip">Unity</span><span class="chip">評価システム設計</span>
-        </div>
-        <div class="wmore">READ MORE <span aria-hidden="true">→</span></div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
 <!-- ===================== works ===================== -->
 <section class="sec" id="works">
   <div class="wrap">
     <div class="sec-head rv">
       <div class="eyebrow">04 / Works</div>
       <h2>制作物</h2>
+      <p class="key-msg">研究や大会で得た技術を、<strong>自分で企画して形にした</strong>作品です。</p>
       <p>個人開発・論文再現実装・開発ツールなど。各カードから詳細ページで、設計と実装の中身を説明しています。</p>
     </div>
 
@@ -635,11 +665,37 @@
   </div>
 </section>
 
-<!-- ===================== contact ===================== -->
-<section class="sec" id="contact">
+<!-- ===================== vision ===================== -->
+<section class="sec" id="vision">
   <div class="wrap">
     <div class="sec-head rv">
-      <div class="eyebrow">06 / Contact</div>
+      <div class="eyebrow">06 / Vision</div>
+      <h2>今後やりたいこと</h2>
+    </div>
+    <div class="vision rv">
+      <p class="vision-lead">研究でつくる「動き」を、<span class="lit">実機のロボット</span>へ。</p>
+      <p>
+        モーション生成の研究では、キャラクター性と感情を分離して動きを生成する手法に取り組んでいます。
+        今後はこの生成モデルと、Unitree Go2 で経験した強化学習・sim-to-real を組み合わせ、
+        ロボットやキャラクターが<strong>意図や感情を言葉以外で伝えられる動作表現</strong>を、
+        シミュレーションの中だけでなく実機で実現したいと考えています。
+      </p>
+      <div class="vflow" aria-label="研究から実機への流れ">
+        <div><b>生成モデル</b><span>モーション生成の研究</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>シミュレーション</b><span>強化学習・検証環境</span></div>
+        <i aria-hidden="true">→</i>
+        <div><b>実機</b><span>ロボットでの動作表現</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== contact ===================== -->
+<section class="sec alt" id="contact">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">07 / Contact</div>
       <h2>連絡先</h2>
       <p>研究・開発・採用に関するご連絡は、お気軽にどうぞ。</p>
     </div>
